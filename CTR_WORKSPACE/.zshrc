@@ -1,6 +1,7 @@
 export PATH=${HOME}/bin:/usr/local/bin:$PATH
 export ZSH=${HOME}/.oh-my-zsh
 export CONFIG=${HOME}/.config
+export WORKSPACE=/WORKSPACE
 
 mkcdir() {
     mkdir -p -- "$1" && cd -P -- "$1"
@@ -119,5 +120,7 @@ ZSH_HIGHLIGHT_STYLES[arg0]='fg=blue,bold'
 
 source $ZSH/oh-my-zsh.sh
 unset zle_bracketed_paste
+
+cd $WORKSPACE
 
 [ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit; }
