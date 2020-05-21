@@ -55,6 +55,7 @@ RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_6
     && sh miniconda.sh -b -p /home/${USERNAME}/miniconda \
     && /home/${USERNAME}/miniconda/bin/conda init zsh \
     && /home/${USERNAME}/miniconda/bin/conda config --set auto_activate_base false \
+    && /home/${USERNAME}/miniconda/bin/conda config --set changeps1 False #stop show env name \
     && rm miniconda.sh
 
 RUN sudo mkdir -p /WORKSPACE \
