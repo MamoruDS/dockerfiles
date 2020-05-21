@@ -4,6 +4,7 @@ LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
 ARG TZ=Asia/Tokyo
 ARG USERNAME=ctr 
+ARG PASSWORD=localpasswd
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -28,7 +29,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
     && useradd -ms /bin/zsh $USERNAME \
     && usermod -aG sudo $USERNAME \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && echo "Set disable_coredump false" >> /etc/sudo.conf
+    && echo "Set disable_coredump false" >> /etc/sudo.conf \
+    && echo ${USERNAME}:${PASSWORD}|chpasswd
 
 USER $USERNAME
 WORKDIR /home/${USERNAME}
@@ -55,7 +57,8 @@ RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_6
     && /home/${USERNAME}/miniconda/bin/conda config --set auto_activate_base false \
     && rm miniconda.sh
 
-RUN mkdir -p /home/${USERNAME}/WORKSPACE \
+RUN sudo mkdir -p /WORKSPACE \
+    && sudo chown ${USERNAME} /WORKSPACE \
     && mkdir -p /home/${USERNAME}/.vscode_server \
     && mkdir -p /home/${USERNAME}/.ssh
 ADD keys/ /home/${USERNAME}/.ssh/
