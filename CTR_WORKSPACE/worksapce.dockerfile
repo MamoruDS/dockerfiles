@@ -2,9 +2,9 @@ FROM ubuntu:20.04
 
 LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
-ENV TZ=Asia/Tokyo
-
+ARG TZ=Asia/Tokyo
 ARG USERNAME=ctr 
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt install -y \
@@ -57,11 +57,8 @@ RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_6
 
 RUN mkdir -p /home/${USERNAME}/WORKSPACE \
     && mkdir -p /home/${USERNAME}/.vscode_server \
-    && mkdir -p /home/${USERNAME}/.ssh \
-    && echo 'Host github.com' > /home/${USERNAME}/.ssh/config \
-    && echo '    HostName github.com' > /home/${USERNAME}/.ssh/config \
-    && echo '    IdentityFile ~/.ssh/github_key' > /home/${USERNAME}/.ssh/config \
-    && echo '    User git' > /home/${USERNAME}/.ssh/config
+    && mkdir -p /home/${USERNAME}/.ssh
+ADD keys/ /home/${USERNAME}/.ssh/
 
 ADD init.sh /home/${USERNAME}/init.sh
 RUN echo ${USERNAME} > /home/${USERNAME}/.user \
