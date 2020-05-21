@@ -14,9 +14,9 @@ or build from dockerfile
 
 arguments:
 
--   USERNAME: your username, default `ctr`
--   PASSWORD: password for `$USERNAME`, default `localpasswd`
--   TZ: your timezone
+-   USERNAME: your username, default value `ctr`
+-   PASSWORD: password for `$USERNAME`, default value `localpasswd`
+-   TZ: your timezone, default value `Etc/UTC`
 
 ```shell
 docker build --build-arg USERNAME=username \

@@ -2,8 +2,8 @@ FROM ubuntu:20.04
 
 LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
-ARG TZ=Asia/Tokyo
-ARG USERNAME=ctr 
+ARG TZ=Etc/UTC
+ARG USERNAME=ctr
 ARG PASSWORD=localpasswd
 
 ARG DEBIAN_FRONTEND=noninteractive
