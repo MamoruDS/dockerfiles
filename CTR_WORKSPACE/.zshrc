@@ -121,6 +121,6 @@ ZSH_HIGHLIGHT_STYLES[arg0]='fg=blue,bold'
 source $ZSH/oh-my-zsh.sh
 unset zle_bracketed_paste
 
-cd $WORKSPACE
+# cd $WORKSPACE
 
-[ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit; }
+# [ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit; }
