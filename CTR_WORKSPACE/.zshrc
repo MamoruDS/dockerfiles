@@ -53,7 +53,11 @@ SPACESHIP_CHAR_COLOR_SECONDARY='yellow'
 SPACESHIP_USER_SHOW='false'
 SPACESHIP_USER_COLOR='cyan'
 SPACESHIP_USER_COLOR_SSH='cyan'
-SPACESHIP_HOST_SHOW='false'
+if [ -z "$TMUX" ]; then
+        SPACESHIP_HOST_SHOW='true'
+else
+        SPACESHIP_HOST_SHOW='false'
+fi
 SPACESHIP_HOST_PREFIX='at '
 SPACESHIP_HOST_COLOR='green'
 SPACESHIP_HOST_COLOR_SSH='white'
@@ -121,6 +125,4 @@ ZSH_HIGHLIGHT_STYLES[arg0]='fg=blue,bold'
 source $ZSH/oh-my-zsh.sh
 unset zle_bracketed_paste
 
-# cd $WORKSPACE
-
-# [ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit; }
+complete -o default -o nospace -W "$(grep "^Host" $HOME/.ssh/config | cut -d" " -f2)" scp sftp ssh
