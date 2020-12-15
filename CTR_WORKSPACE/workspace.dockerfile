@@ -45,8 +45,11 @@ ARG ZSH_CUSTOM="/home/$USERNAME/.oh-my-zsh/custom"
 RUN git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" \
     && ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme" \
     && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
-    && git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    && git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
+    && mkdir -p /home/${USERNAME}/.config
 ADD .zshrc /home/${USERNAME}/.zshrc
+ADD .config /home/${USERNAME}/.config
+ADD script/ws_shell_utils.sh /home/${USERNAME}/script/ws_shell_utils.sh
 ADD .tmux.conf /home/${USERNAME}/.tmux.conf
 
 # installation of miniconda
