@@ -5,6 +5,10 @@ if [ ! -f '/.init' ]; then
     exit 0
 fi
 
+if [ -z $SHELL ]; then
+    SHELL='bash'
+fi
+
 if [ -z $TZ ]; then
     TZ='Etc/UTC'
 fi
@@ -16,7 +20,7 @@ fi
 if [ -z $PASSWORD ]; then
     PASSWORD='localpasswd'
 fi
-useradd -ms /bin/zsh $USER \
+useradd -ms /bin/$SHELL $USER \
     && usermod -aG sudo $USER \
     && echo $USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER \
     && echo 'Set disable_coredump false' >> /etc/sudo.conf \
@@ -28,9 +32,14 @@ if [ ! -z $GIT_EMAIL ]; then
     su -s /bin/bash -c "git config --global user.name $GIT_NAME" - $USER
 fi
 
-mkdir -p /home/$USER \
-    && chown mamoru /zsh_shell.sh && chmod u+x /zsh_shell.sh \
-    && su -s /bin/bash -c "/zsh_shell.sh $USER" - $USER
+if [ "$SHELL" = 'zsh' ]; then
+    mkdir -p /home/$USER \
+        && chown mamoru /zsh_shell.sh && chmod u+x /zsh_shell.sh \
+        && su -s /bin/bash -c "/zsh_shell.sh $USER" - $USER
+fi
+
+chown mamoru /conda.sh && chmod u+x /conda.sh \
+    && su -s /bin/bash -c "/conda.sh $USER $SHELL" - $USER
 
 rm /.init /zsh_shell.sh \
     && cd /home/$USER \
