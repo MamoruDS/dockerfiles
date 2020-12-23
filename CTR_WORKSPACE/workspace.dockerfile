@@ -21,7 +21,7 @@ RUN apt update && apt install -y \
     neovim
 
 # installation of node 12.x
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - \
     && apt install -y nodejs
 
 # user set up
@@ -45,11 +45,10 @@ ARG ZSH_CUSTOM="/home/$USERNAME/.oh-my-zsh/custom"
 RUN git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" \
     && ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme" \
     && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
-    && git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
-    && mkdir -p /home/${USERNAME}/.config
+    && git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 ADD .zshrc /home/${USERNAME}/.zshrc
 ADD .config /home/${USERNAME}/.config
-ADD script/ws_shell_utils.sh /home/${USERNAME}/scripts/ws_shell_utils.sh
+ADD scripts/utils.sh /home/${USERNAME}/scripts/ws_shell_utils.sh
 ADD .tmux.conf /home/${USERNAME}/.tmux.conf
 
 # installation of miniconda

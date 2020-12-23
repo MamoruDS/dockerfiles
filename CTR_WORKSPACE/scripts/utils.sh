@@ -1,4 +1,5 @@
-# v0.1.0
+# !/bin/sh
+# v0.1.1
 
 # functions
 mkcdir() {
@@ -9,6 +10,9 @@ color_test() {
 }
 
 # SSH auto complete
+if [ ! -d "$HOME/.ssh" ]; then
+    mkdir -p $HOME/.ssh
+fi
 autoload -U +X bashcompinit && bashcompinit
 autoload -U +X compinit && compinit
 complete -o default -o nospace -W "$(grep "^Host" $HOME/.ssh/config | cut -d" " -f2)" scp sftp ssh
