@@ -1,6 +1,59 @@
 # CTR_WORKSPACE
 
-| A image for workspace deployments, coming with `oh-my-zsh`, `node.js`, `conda`, ssh-enabled ...etc
+> A image for workspace deployments, coming with `oh-my-zsh`, `node.js`, `conda`, ssh-enabled ...etc
+
+## Tags
+
+-   `latest`
+-   `latest-node`
+
+## usage
+
+start container first
+
+```shell
+docker run -dt -e "USER=yourname" \
+               -e "SHELL=zsh" \
+               -e "CONDA=1" \
+               --name ctr \
+               --hostname "KLBS20CX" \
+               mamoruio/workspace:latest
+```
+
+then attach to container's shell
+
+```shell
+docker exec -it --user yourname ctr zsh
+```
+
+or connect with SSH
+
+```shell
+docker run -dt \
+        -e "USER=yourname" \
+        -e "SHELL=zsh" \
+        -e "PASSWORD=passwd" \
+        -p 8022:22 \
+        --name ctr \
+        --hostname "container_ws" \
+        mamoruio/workspace:latest
+
+ssh yourname@127.0.0.1 -p 8022
+```
+
+## Parameters
+
+| Parameter                        | Function                           |
+| -------------------------------- | ---------------------------------- |
+| `-e "SHELL=zsh"`                 | shell, default: `bash`             |
+| `-e "TZ=Asia/Tokyo"`             | timezone, default: `Etc/UTC`       |
+| `-e "USER=yourname"`             | default: `ctr`                     |
+| `-e "PASSWORD=passwd"`           | default: `localpasswd`             |
+| `-e "GIT_EMAIL=foo.bar"`         |                                    |
+| `-e "GIT_NAME=foo.bar"`          |                                    |
+| `-e "CONDA=1"`                   | install conda or not, default: ` ` |
+| `-p 22`                          | ssh server                         |
+| `--hostname "USER=container_ws"` | hostname                           |
 
 ## build
 
@@ -8,61 +61,13 @@ Pull image from docker hub
 
 ```shell
 docker pull mamoruio/workspace:latest
+docker pull mamoruio/workspace:latest-node
 ```
 
 or build from dockerfile
 
-arguments:
-
--   USERNAME: your username, default value `ctr`
--   PASSWORD: password for `$USERNAME`, default value `localpasswd`
--   TZ: your timezone, default value `Etc/UTC`
-
 ```shell
-docker build --build-arg USERNAME=username \
-             --build-arg PASSWORD=password \
-             --build-arg TZ=Asia/Shanghai \
+docker build --no-cache \
              -t mamoruio/workspace:tag \
              -f workspace.dockerfile .
 ```
-
-## usage
-
-Start container first
-
-```shell
-docker run -dt --name ctr_ws -h CTRWS mamoruio/workspace:latest
-```
-
-then attach to container's shell
-
-```shell
-docker exec -it ctr_ws zsh
-```
-
-or connect with SSH
-
--   mount your workspace
-
-    ```shell
-    docker run -dt --name ctr_ws -v ${WORKSPACE}:/WORKSPACE mamoruio/workspace:latest
-    ```
-
--   connect with SSH
-
-    ```shell
-    docker run -dt --name ctr_ws -p 8022:22 mamoruio/workspace:latest
-    ```
-
-    You can use SSH key to access your container, mount `authorized_keys` to container or put it in `keys/` before build
-
-    update your ssh config file with ⬇️
-
-    ```
-    Host CTR
-        HostName 127.0.0.1
-        User ctr
-        Port 8022
-        StrictHostKeyChecking no
-        IdentityFile ~/.ssh/key_for_container
-    ```
