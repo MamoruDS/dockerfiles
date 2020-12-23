@@ -12,6 +12,7 @@ color_test() {
 # SSH auto complete
 if [ ! -d "$HOME/.ssh" ]; then
     mkdir -p $HOME/.ssh
+    touch -p $HOME/.ssh/config
 fi
 autoload -U +X bashcompinit && bashcompinit
 autoload -U +X compinit && compinit
