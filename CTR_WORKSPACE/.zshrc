@@ -13,7 +13,7 @@ ZSH_THEME="spaceship"
 
 source $CONFIG/zsh_theme_spaceship.sh
 source $CONFIG/zsh_theme_highlight.sh
-source $SCRIPT/ws_shell_utils.sh
+source $SCRIPT/utils.sh
 
 plugins=(
     git

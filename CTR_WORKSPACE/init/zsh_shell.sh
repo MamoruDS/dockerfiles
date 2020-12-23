@@ -23,9 +23,8 @@ git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/theme
 curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.zshrc -o $HOME/.zshrc \
     && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.tmux.conf -o $HOME/.tmux.conf \
     && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.config/zsh_theme_highlight.sh -o $HOME/.config/zsh_theme_highlight.sh --create-dirs \
-    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.config/zsh_theme_spaceship.sh -o $HOME/.config/zsh_theme_spaceship.sh --create-dirs
-    # && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.config/zsh_theme_spaceship.sh -o $HOME/.config/zsh_theme_spaceship.sh --create-dirs \
-    # && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/scripts/utils.sh -o $HOME/scripts/utils.sh --create-dirs
+    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.config/zsh_theme_spaceship.sh -o $HOME/.config/zsh_theme_spaceship.sh --create-dirs \
+    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/scripts/utils.sh -o $HOME/scripts/utils.sh --create-dirs
 
 chown $USERNAME $HOME/.zshrc
 chown $USERNAME $HOME/.tmux.conf
