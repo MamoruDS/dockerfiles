@@ -14,6 +14,9 @@ RUN apt update && apt install -y \
     # changing to vim/nano ...etc
     neovim
 
+# installation of node lts
+RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt install -y nodejs
 ADD init/ /
 
 EXPOSE 22
