@@ -34,12 +34,14 @@ fi
 
 if [ "$SHELL" = 'zsh' ]; then
     mkdir -p /home/$USER \
-        && chown mamoru /zsh_shell.sh && chmod u+x /zsh_shell.sh \
+        && chown $USER /zsh_shell.sh && chmod u+x /zsh_shell.sh \
         && su -s /bin/bash -c "/zsh_shell.sh $USER" - $USER
 fi
 
-chown mamoru /conda.sh && chmod u+x /conda.sh \
-    && su -s /bin/bash -c "/conda.sh $USER $SHELL" - $USER
+if [ ! -z $CONDA ]; then
+    chown $USER /conda.sh && chmod u+x /conda.sh \
+        && su -s /bin/bash -c "/conda.sh $USER $SHELL" - $USER
+fi
 
 rm /.init /zsh_shell.sh \
     && cd /home/$USER \
