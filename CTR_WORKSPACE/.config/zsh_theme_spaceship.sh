@@ -23,7 +23,7 @@ SPACESHIP_PROMPT_ORDER=(
     # dotnet      # .NET section
     # ember       # Ember.js section
     # kubecontext # Kubectl context section
-    # exec_time   # Execution time
+    exec_time   # Execution time
     time     # Time stampts section
     line_sep # Line break
     # battery     # Battery level and status
