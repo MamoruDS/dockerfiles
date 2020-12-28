@@ -43,17 +43,18 @@ ssh yourname@127.0.0.1 -p 8022
 
 ## Parameters
 
-| Parameter                        | Function                           |
-| -------------------------------- | ---------------------------------- |
-| `-e "SHELL=zsh"`                 | shell, default: `bash`             |
-| `-e "TZ=Asia/Tokyo"`             | timezone, default: `Etc/UTC`       |
-| `-e "USER=yourname"`             | default: `ctr`                     |
-| `-e "PASSWORD=passwd"`           | default: `localpasswd`             |
-| `-e "GIT_EMAIL=foo.bar"`         |                                    |
-| `-e "GIT_NAME=foo.bar"`          |                                    |
-| `-e "CONDA=1"`                   | install conda or not, default: ` ` |
-| `-p 22`                          | ssh server                         |
-| `--hostname "USER=container_ws"` | hostname                           |
+| Parameter                        | Function                             |
+| -------------------------------- | ------------------------------------ |
+| `-e "SHELL=zsh"`                 | specify shell, default: `bash`       |
+| `-e "TZ=Asia/Tokyo"`             | specify timezone, default: `Etc/UTC` |
+| `-e "UID=1000"`                  | specify `UID`                        |
+| `-e "USER=yourname"`             | default: `ctr`                       |
+| `-e "PASSWORD=passwd"`           | default: `localpasswd`               |
+| `-e "GIT_EMAIL=foo.bar"`         |                                      |
+| `-e "GIT_NAME=foo.bar"`          |                                      |
+| `-e "CONDA=1"`                   | install conda or not, default: ` `   |
+| `-p 22`                          | ssh server                           |
+| `--hostname "USER=container_ws"` | specify hostname                     |
 
 ## build
 
