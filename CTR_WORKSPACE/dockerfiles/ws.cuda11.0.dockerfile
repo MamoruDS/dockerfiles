@@ -10,8 +10,8 @@ RUN apt update && apt install -y \
     curl \
     dnsutils \
     iputils-ping \
-    tmux \ 
-    neovim
+    tmux \
+    nano
 
 ADD init/ /
 

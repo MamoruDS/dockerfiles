@@ -11,10 +11,8 @@ RUN apt update && apt install -y \
     dnsutils \
     iputils-ping \
     tmux \
-    # changing to vim/nano ...etc
-    neovim
+    nano
 
-# installation of node lts
 RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - \
     && apt install -y nodejs
 ADD init/ /

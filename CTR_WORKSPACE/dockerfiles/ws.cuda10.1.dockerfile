@@ -12,7 +12,7 @@ RUN apt update && apt install -y \
     dnsutils \
     iputils-ping \
     tmux \ 
-    vim
+    nano
 
 ADD init/ /
 

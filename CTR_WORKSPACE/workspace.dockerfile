@@ -11,8 +11,7 @@ RUN apt update && apt install -y \
     dnsutils \
     iputils-ping \
     tmux \
-    # changing to vim/nano ...etc
-    neovim
+    nano
 
 ADD init/ /
 
