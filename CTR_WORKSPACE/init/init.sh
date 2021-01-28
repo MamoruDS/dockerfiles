@@ -1,10 +1,5 @@
 # !/bin/sh
 
-if [ ! -f '/.init' ]; then
-    cd /home/$USER && su $USER || su $USER
-    exit 0
-fi
-
 if [ -z $SHELL ]; then
     SHELL='bash'
 fi
@@ -57,6 +52,11 @@ if [ ! -z $CUSTOM_NVIM ]; then
         && sudo su -s /bin/bash -c "/custom_nvim.sh $USER" - $USER
 fi
 
-rm /.init /*.sh &> /dev/null \
-    && cd /home/$USER \
-    && su $USER
+rm /.init /*.sh &> /dev/null
+cat << EOF > /init.sh
+if [ ! -f '/.init' ]; then
+    cd /home/$USER && su $USER || su $USER
+    exit 0
+fi
+EOF
+cd /home/$USER && su $USER
