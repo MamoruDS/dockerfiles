@@ -52,8 +52,9 @@ if [ ! -z $CUSTOM_NVIM ]; then
         && sudo su -s /bin/bash -c "/custom_nvim.sh $USER" - $USER
 fi
 
-rm /.init /*.sh &> /dev/null
+rm /.init /*.sh 2> /dev/null
 cat << EOF > /init.sh
+#!/bin/sh
 if [ ! -f '/.init' ]; then
     cd /home/$USER && su $USER || su $USER
     exit 0
