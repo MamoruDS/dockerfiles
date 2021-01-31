@@ -16,4 +16,6 @@ RUN apt update && apt install -y \
 ADD init/ /
 
 EXPOSE 22
-CMD service ssh start && sh init.sh && tail -f /dev/null
+CMD service ssh start && \
+    sh init.sh 2> /dev/null ; \
+    tail -f /dev/null
