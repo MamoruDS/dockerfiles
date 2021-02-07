@@ -19,7 +19,6 @@ plugins=(
     git
     pip
     npm
-    npx
     nvm
     node
     python
