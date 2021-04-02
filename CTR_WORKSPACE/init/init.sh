@@ -1,4 +1,5 @@
 # !/bin/sh
+# TODO: this script assuming HOME_DIR is /home/$username
 
 if [ -z $SHELL ]; then
     SHELL='bash'

@@ -5,8 +5,14 @@ if [ -z $USERNAME ]; then
     USERNAME=$(whoami)
 fi
 
-HOME=/home/$USERNAME
-ZSH_CUSTOM="/home/$USERNAME/.oh-my-zsh/custom"
+if [ -z $HOME ]; then
+    HOME="/home/$USERNAME"
+    if [ $USERNAME = 'root' ]; then
+        HOME="/root"
+    fi
+fi
+
+ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
 
 touch $HOME/.zshrc \
     && chown $USERNAME $HOME/.zshrc \

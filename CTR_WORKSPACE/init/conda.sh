@@ -6,7 +6,12 @@ if [ -z $USERNAME ]; then
 fi
 SHELL=$2
 
-HOME=/home/$USERNAME
+if [ -z $HOME ]; then
+    HOME="/home/$USERNAME"
+    if [ $USERNAME = 'root' ]; then
+        HOME="/root"
+    fi
+fi
 
 # x86_64 only
 curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o miniconda.sh \

@@ -6,7 +6,12 @@ if [ -z $USERNAME ]; then
 fi
 SHELL=$2
 
-HOME=/home/$USERNAME
+if [ -z $HOME ]; then
+    HOME="/home/$USERNAME"
+    if [ $USERNAME = 'root' ]; then
+    HOME="/root"
+    fi
+fi
 
 curl -sL https://raw.githubusercontent.com/MamoruDS/vimrc/main/install.sh | sh
 
