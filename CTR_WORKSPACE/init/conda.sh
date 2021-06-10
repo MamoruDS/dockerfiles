@@ -13,8 +13,7 @@ if [ -z $HOME ]; then
     fi
 fi
 
-# x86_64 only
-curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o miniconda.sh \
+curl -fSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh -o miniconda.sh \
     && sh miniconda.sh -b -p $HOME/miniconda \
     && $HOME/miniconda/bin/conda init $SHELL \
     && $HOME/miniconda/bin/conda config --set auto_activate_base false \
