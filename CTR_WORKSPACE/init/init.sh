@@ -44,7 +44,7 @@ fi
 
 if [ ! -z $CUSTOM_NVIM ]; then
     if ! [ -x "$(command -v node)" ]; then
-        curl -s https://install-node.now.sh/lts | bash -s -- --yes
+        curl -sL https://install-node.now.sh/lts | bash -s -- --yes
     fi
     if ! [ -x "$(command -v nvim)" ]; then
         curl -sL https://raw.githubusercontent.com/MamoruDS/vimrc/main/install_neovim.sh | sh
