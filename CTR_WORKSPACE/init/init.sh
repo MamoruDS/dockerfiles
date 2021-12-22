@@ -1,5 +1,4 @@
 # !/bin/sh
-# TODO: this script assuming HOME_DIR is /home/$username
 
 if [ -z $SHELL ]; then
     SHELL='bash'
@@ -16,11 +15,27 @@ fi
 if [ -z $USER ]; then
     USER='ctr'
 fi
+if [ ! -z $GID ]; then
+    if [ -z $GROUP ]; then
+        groupadd -g $GID $USER
+    else
+        groupadd -g $GID $GROUP
+    fi
+    useradd -ms /bin/$SHELL -u $UID -g $GID $USER
+else
+    useradd -ms /bin/$SHELL -u $UID $USER
+fi
 if [ -z $PASSWORD ]; then
     PASSWORD='localpasswd'
 fi
-useradd -ms /bin/$SHELL --uid=$UID $USER \
-    && usermod -aG sudo $USER \
+if [ -z $HOME ]; then
+    HOME="/home/$USER"
+    if [ $USER = 'root' ]; then
+        HOME="/root"
+    fi
+fi
+
+usermod -aG sudo $USER \
     && echo $USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER \
     && echo 'Set disable_coredump false' >> /etc/sudo.conf \
     && echo ${USER}:${PASSWORD}|chpasswd
@@ -32,7 +47,7 @@ if [ ! -z $GIT_EMAIL ]; then
 fi
 
 if [ "$SHELL" = 'zsh' ]; then
-    mkdir -p /home/$USER \
+    mkdir -p $HOME \
         && chown $USER /zsh_shell.sh && chmod u+x /zsh_shell.sh \
         && su -s /bin/bash -c "/zsh_shell.sh $USER" - $USER
 fi
@@ -54,7 +69,7 @@ if [ ! -z $CUSTOM_NVIM ]; then
 fi
 
 if [ -f "/usr/bin/vncserver" ]; then
-    VNC=/home/$USER/.vnc
+    VNC=$HOME/.vnc
     mkdir -p $VNC \
         && mv vncpasswd $VNC/passwd \
         && mv xstartup $VNC/xstartup
@@ -67,8 +82,8 @@ rm /.init /*.sh 2> /dev/null
 cat << EOF > /init.sh
 #!/bin/sh
 if [ ! -f '/.init' ]; then
-    cd /home/$USER && su $USER || su $USER
+    cd $HOME && su $USER || su $USER
     exit 0
 fi
 EOF
-cd /home/$USER && su $USER
+cd $HOME && su $USER
