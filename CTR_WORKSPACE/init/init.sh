@@ -53,6 +53,16 @@ if [ ! -z $CUSTOM_NVIM ]; then
         && sudo su -s /bin/bash -c "/custom_nvim.sh $USER" - $USER
 fi
 
+if [ -f "/usr/bin/vncserver" ]; then
+    VNC=/home/$USER/.vnc
+    mkdir -p $VNC \
+        && mv vncpasswd $VNC/passwd \
+        && mv xstartup $VNC/xstartup
+    chown -R $USER $VNC \
+        && chmod 755 $VNC/xstartup
+    sudo -u $USER vncserver
+fi
+
 rm /.init /*.sh 2> /dev/null
 cat << EOF > /init.sh
 #!/bin/sh
