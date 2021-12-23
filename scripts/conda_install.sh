@@ -24,9 +24,18 @@ if [ -z $CONDA_HOME ]; then
     CONDA_HOME="$HOME/miniconda"
 fi
 
-curl -fSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh -o $HOME/miniconda.sh \
-    && sh $HOME/miniconda.sh -b -p $CONDA_HOME \
-    && $CONDA_HOME/bin/conda init $SHELL \
-    && $CONDA_HOME/bin/conda config --set auto_activate_base false \
-    && $CONDA_HOME/bin/conda config --set changeps1 $changeps1 \
-    && rm $HOME/miniconda.sh
+if [ -d $CONDA_HOME ]; then
+    $CONDA_HOME/bin/conda init $SHELL \
+        && $CONDA_HOME/bin/conda config --set auto_activate_base false \
+        && $CONDA_HOME/bin/conda config --set changeps1 $changeps1
+
+else
+    curl -fSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh -o $HOME/miniconda.sh \
+        && sh $HOME/miniconda.sh -b -p $CONDA_HOME \
+        && $CONDA_HOME/bin/conda init $SHELL \
+        && $CONDA_HOME/bin/conda config --set auto_activate_base false \
+        && $CONDA_HOME/bin/conda config --set changeps1 $changeps1 \
+        && rm $HOME/miniconda.sh
+fi
+
+
