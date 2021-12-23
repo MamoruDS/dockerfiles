@@ -1,12 +1,10 @@
-ARG CUDA_VER=11.4
-FROM nvidia/cuda:${CUDA_VER}-devel-ubuntu20.04
+FROM ubuntu:20.04
 LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
     locales \
     git \
-    gnupg \
     sudo \
     zsh \
     openssh-server \
