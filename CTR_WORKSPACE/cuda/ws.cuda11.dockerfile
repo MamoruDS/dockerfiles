@@ -4,6 +4,7 @@ LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
+    locales \
     git \
     gnupg \
     sudo \
@@ -14,11 +15,11 @@ RUN apt update && apt install -y \
     iputils-ping \
     tmux \
     nano
+RUN locale-gen en_US.UTF-8
 
 ADD init/ /
 
 EXPOSE 22
 CMD service ssh start && \
-    sh init.sh 2> /dev/null ; \
+    sh init.sh 2>&1 | tee /dev/null ; \
     tail -f /dev/null
-
