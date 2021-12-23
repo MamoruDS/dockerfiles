@@ -4,7 +4,6 @@ USERNAME=$1
 if [ -z $USERNAME ]; then
     USERNAME=$(whoami)
 fi
-SHELL=$2
 
 if [ -z $HOME ]; then
     HOME="/home/$USERNAME"

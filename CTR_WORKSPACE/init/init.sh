@@ -41,21 +41,18 @@ usermod -aG sudo $USER \
     && echo ${USER}:${PASSWORD}|chpasswd
 unset PASSWORD
 
-if [ ! -z $GIT_EMAIL ]; then
-    su -s /bin/bash -c "git config --global user.email $GIT_EMAIL" - $USER
-    su -s /bin/bash -c "git config --global user.name $GIT_NAME" - $USER
-fi
-
 if [ "$SHELL" = 'zsh' ]; then
     curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/custom_zsh.sh -o /zsh_shell.sh \
-        && chown $USER /zsh_shell.sh && chmod u+x /zsh_shell.sh \
-        && su -s /bin/bash -c "/zsh_shell.sh $USER" - $USER
+        && chown $USER /zsh_shell.sh \
+        && chmod u+x /zsh_shell.sh \
+        && sudo -H -u $USER bash -c "/zsh_shell.sh $USER"
 fi
 
 if [ ! -z $CONDA ]; then
     curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/conda_install.sh -o /conda_install.sh \
-        && chown $USER /conda_install.sh && chmod u+x /conda_install.sh \
-        && su -s /bin/bash -c "/conda_install.sh $USER $SHELL" - $USER
+        && chown $USER /conda_install.sh \
+        && chmod u+x /conda_install.sh \
+        && sudo -H -u $USER bash -c "/conda_install.sh $USER $SHELL"
 fi
 
 if [ ! -z $CUSTOM_NVIM ]; then
@@ -66,8 +63,9 @@ if [ ! -z $CUSTOM_NVIM ]; then
         curl -sL https://raw.githubusercontent.com/MamoruDS/vimrc/main/install_neovim.sh | sh
     fi
     curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/custom_nvim.sh -o /custom_nvim.sh \
-        && chown $USER /custom_nvim.sh && chmod u+x /custom_nvim.sh \
-        && sudo su -s /bin/bash -c "/custom_nvim.sh $USER" - $USER
+        && chown $USER /custom_nvim.sh \
+        && chmod u+x /custom_nvim.sh \
+        && sudo -H -u $USER bash -c "/custom_nvim.sh $USER"
 fi
 
 if [ -f "/usr/bin/vncserver" ]; then
