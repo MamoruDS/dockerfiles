@@ -5,6 +5,7 @@ if [ -z $USERNAME ]; then
     USERNAME=$(whoami)
 fi
 SHELL=$2
+CONDA_HOME=$3
 
 if [ -z $HOME ]; then
     HOME="/home/$USERNAME"
@@ -19,9 +20,13 @@ else
     changeps1=False
 fi
 
+if [ -z $CONDA_HOME ]; then
+    CONDA_HOME="$HOME/miniconda"
+fi
+
 curl -fSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh -o $HOME/miniconda.sh \
-    && sh $HOME/miniconda.sh -b -p $HOME/miniconda \
-    && $HOME/miniconda/bin/conda init $SHELL \
-    && $HOME/miniconda/bin/conda config --set auto_activate_base false \
-    && $HOME/miniconda/bin/conda config --set changeps1 $changeps1 \
+    && sh $HOME/miniconda.sh -b -p $CONDA_HOME \
+    && $CONDA_HOME/bin/conda init $SHELL \
+    && $CONDA_HOME/bin/conda config --set auto_activate_base false \
+    && $CONDA_HOME/bin/conda config --set changeps1 $changeps1 \
     && rm $HOME/miniconda.sh
