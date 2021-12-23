@@ -33,9 +33,9 @@ touch $HOME/.zshrc \
     && chown $USERNAME $HOME/.zshrc \
     # && su $USERNAME
 
-curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -o oh_my_zsh.sh \
-    && zsh oh_my_zsh.sh --unattended \
-    && rm oh_my_zsh.sh
+curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -o $HOME/oh_my_zsh.sh \
+    && zsh $HOME/oh_my_zsh.sh --unattended \
+    && rm $HOME/oh_my_zsh.sh
 git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" \
     && ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme" \
     && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \

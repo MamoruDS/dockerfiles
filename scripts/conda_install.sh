@@ -13,15 +13,15 @@ if [ -z $HOME ]; then
     fi
 fi
 
-if [ "$SHELL" == "bash" ]; then
+if [ "$SHELL" = "bash" ]; then
     changeps1=True
 else
     changeps1=False
 fi
 
-curl -fSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh -o miniconda.sh \
-    && sh miniconda.sh -b -p $HOME/miniconda \
+curl -fSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh -o $HOME/miniconda.sh \
+    && sh $HOME/miniconda.sh -b -p $HOME/miniconda \
     && $HOME/miniconda/bin/conda init $SHELL \
     && $HOME/miniconda/bin/conda config --set auto_activate_base false \
     && $HOME/miniconda/bin/conda config --set changeps1 $changeps1 \
-    && rm miniconda.sh
+    && rm $HOME/miniconda.sh
