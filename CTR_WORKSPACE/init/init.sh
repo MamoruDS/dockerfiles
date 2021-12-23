@@ -47,14 +47,15 @@ if [ ! -z $GIT_EMAIL ]; then
 fi
 
 if [ "$SHELL" = 'zsh' ]; then
-    mkdir -p $HOME \
+    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/custom_zsh.sh -o /zsh_shell.sh \
         && chown $USER /zsh_shell.sh && chmod u+x /zsh_shell.sh \
         && su -s /bin/bash -c "/zsh_shell.sh $USER" - $USER
 fi
 
 if [ ! -z $CONDA ]; then
-    chown $USER /conda.sh && chmod u+x /conda.sh \
-        && su -s /bin/bash -c "/conda.sh $USER $SHELL" - $USER
+    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/conda_install.sh -o /conda_install.sh \
+        && chown $USER /conda_install.sh && chmod u+x /conda_install.sh \
+        && su -s /bin/bash -c "/conda_install.sh $USER $SHELL" - $USER
 fi
 
 if [ ! -z $CUSTOM_NVIM ]; then
@@ -64,16 +65,17 @@ if [ ! -z $CUSTOM_NVIM ]; then
     if ! [ -x "$(command -v nvim)" ]; then
         curl -sL https://raw.githubusercontent.com/MamoruDS/vimrc/main/install_neovim.sh | sh
     fi
-    chown $USER /custom_nvim.sh && chmod u+x /custom_nvim.sh \
+    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/custom_nvim.sh -o /custom_nvim.sh \
+        && chown $USER /custom_nvim.sh && chmod u+x /custom_nvim.sh \
         && sudo su -s /bin/bash -c "/custom_nvim.sh $USER" - $USER
 fi
 
 if [ -f "/usr/bin/vncserver" ]; then
     VNC=$HOME/.vnc
     mkdir -p $VNC \
-        && mv vncpasswd $VNC/passwd \
-        && mv xstartup $VNC/xstartup
-    chown -R $USER $VNC \
+        && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/init/vncpasswd -o $VNC/passwd \
+        && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/init/xstartup -o $VNC/xstartup \
+        && chown -R $USER $VNC \
         && chmod 755 $VNC/xstartup
     sudo -u $USER vncserver
 fi
