@@ -37,5 +37,3 @@ else
         && $CONDA_HOME/bin/conda config --set changeps1 $changeps1 \
         && rm $HOME/miniconda.sh
 fi
-
-

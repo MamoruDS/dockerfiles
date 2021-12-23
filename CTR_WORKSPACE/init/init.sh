@@ -41,6 +41,15 @@ usermod -aG sudo $USER \
     && echo ${USER}:${PASSWORD}|chpasswd
 unset PASSWORD
 
+if [ ! -z $START_SCRIPT ]; then
+    curl -sSfL $START_SCRIPT -o /start_script.sh
+fi
+if [ -f "/start_script.sh" ]; then
+    chown $USER /start_script.sh \
+        && chmod u+x /start_script.sh \
+        && sudo -H -u $USER bash -c "/start_script.sh"
+fi
+
 if [ "$SHELL" = 'zsh' ]; then
     curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/custom_zsh.sh -o /zsh_shell.sh \
         && chown $USER /zsh_shell.sh \
@@ -49,10 +58,13 @@ if [ "$SHELL" = 'zsh' ]; then
 fi
 
 if [ ! -z $CONDA ]; then
+    if [ -z $CONDA_HOME ]; then
+        CONDA_HOME="$HOME/miniconda"
+    fi
     curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/conda_install.sh -o /conda_install.sh \
         && chown $USER /conda_install.sh \
         && chmod u+x /conda_install.sh \
-        && sudo -H -u $USER bash -c "/conda_install.sh $USER $SHELL"
+        && sudo -H -u $USER bash -c "/conda_install.sh $USER $SHELL $CONDA_HOME"
 fi
 
 if [ ! -z $CUSTOM_NVIM ]; then
