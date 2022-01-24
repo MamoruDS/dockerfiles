@@ -41,11 +41,11 @@ git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/theme
     && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
     && git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
-curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.zshrc -o $HOME/.zshrc \
-    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.tmux.conf -o $HOME/.tmux.conf \
-    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.config/zsh_theme_highlight.sh -o $HOME/.config/zsh_theme_highlight.sh --create-dirs \
-    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/.config/zsh_theme_spaceship.sh -o $HOME/.config/zsh_theme_spaceship.sh --create-dirs \
-    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/master/CTR_WORKSPACE/scripts/utils.sh -o $HOME/scripts/utils.sh --create-dirs
+curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/.zshrc -o $HOME/.zshrc \
+    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/.tmux.conf -o $HOME/.tmux.conf \
+    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/.config/zsh_theme_highlight.sh -o $HOME/.config/zsh_theme_highlight.sh --create-dirs \
+    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/.config/zsh_theme_spaceship.sh -o $HOME/.config/zsh_theme_spaceship.sh --create-dirs \
+    && curl https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/scripts/utils.sh -o $HOME/scripts/utils.sh --create-dirs
 
 chown $USERNAME $HOME/.zshrc
 chown $USERNAME $HOME/.tmux.conf
