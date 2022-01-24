@@ -11,6 +11,9 @@ TERM=xterm-256color
 
 ZSH_THEME="spaceship"
 
+# oh-my-zsh
+DISABLE_UPDATE_PROMPT=true
+
 source $CONFIG/zsh_theme_spaceship.sh
 source $CONFIG/zsh_theme_highlight.sh
 source $SCRIPT/utils.sh
