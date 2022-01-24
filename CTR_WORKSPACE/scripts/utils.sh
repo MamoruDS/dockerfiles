@@ -1,12 +1,16 @@
 # !/bin/sh
 # v0.1.1
 
-# functions
-mkcdir() {
-    mkdir -p -- "$1" && cd -P -- "$1"
+cdr() {
+    cd $(git rev-parse --show-toplevel)
 }
+
 color_test() {
     curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
+}
+
+mkcdir() {
+    mkdir -p -- "$1" && cd -P -- "$1"
 }
 
 # SSH auto complete
