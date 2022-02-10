@@ -1,6 +1,8 @@
 # CTR_WORKSPACE
 
-> All-in-one image for workspace with `conda`, `vnc`, ssh-enabled ...etc
+[![](https://img.shields.io/docker/pulls/mamoruio/workspace?style=flat-square)](https://hub.docker.com/r/mamoruio/workspace)
+
+All-in-one image for workspace with `conda`, `vnc`, ssh-enabled ...etc
 
 ## Tags
 
@@ -10,8 +12,6 @@
 -   `cuda11.{}-vnc`
 
 ## Usage
-
-start container first
 
 ```shell
 docker run -dt -e "USER=yourname" \
@@ -63,17 +63,15 @@ ssh yourname@127.0.0.1 -p 8022
 
 ## Build
 
-Pull image from docker hub
-
-```shell
-docker pull mamoruio/workspace:base
-docker pull mamoruio/workspace:base-vnc
-```
-
-or build from dockerfile
+build from dockerfile
 
 ```shell
 docker build --no-cache \
-             -t mamoruio/workspace:tag \
+             -t mamoruio/workspace:local \
              -f ws.dockerfile .
+
+docker build --no-cache \
+             -t mamoruio/workspace:cuda11.3-vnc \
+             -f cuda/ws.vnc.cuda11.dockerfile \
+             --build-arg "CUDA_VER=11.3.0" .
 ```
