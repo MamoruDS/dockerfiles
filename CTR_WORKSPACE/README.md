@@ -11,7 +11,7 @@ All-in-one image for workspace with `conda`, `vnc`, ssh-enabled ...etc
 -   `cuda11.{}`
 -   `cuda11.{}-vnc`
 
-## Usage
+## Quick examples
 
 ```shell
 docker run -dt -e "USER=yourname" \
@@ -28,7 +28,7 @@ then attach to container's shell
 docker exec -it --user yourname ctr zsh
 ```
 
-or connect with SSH
+or connect with `ssh`
 
 ```shell
 docker run -dt \
@@ -43,27 +43,32 @@ docker run -dt \
 ssh yourname@127.0.0.1 -p 8022
 ```
 
-## Parameters
+## Environment variables
 
-| Parameter                | Function                                                                      |
-| ------------------------ | ----------------------------------------------------------------------------- |
-| `-e "START_SCRIPT=$RMT"` | start script <br />default: ` `                                               |
-| `-e "SHELL=zsh"`         | specify shell<br />default: `bash`                                            |
-| `-e "TZ=Asia/Tokyo"`     | specify timezone<br />default: `Etc/UTC`                                      |
-| `-e "UID=1000"`          | specify `UID`                                                                 |
-| `-e "USER=username"`     | default: `ctr`                                                                |
-| `-e "GID=5000"`          | specify `GID` for user<br />default: ` `                                      |
-| `-e "GROUP=groupname"`   | ignore when `GID` not given<br />default: ` `                                 |
-| `-e "PASSWORD=passwd"`   | default: `localpasswd`                                                        |
-| `-e "CONDA=1"`           | install conda or not<br />default: ` `                                        |
-| `-e "CONDA_HOME=1"`      | install conda or not<br />default: `$HOME/miniconda`                          |
-| `-e "CUSTOM_NVIM=1"`     | install [custom](https://github.com/MamoruDS/vimrc) neovim <br />default: ` ` |
-| `-p 22`                  | ssh server                                                                    |
-| `-p 5901`                | VNC server                                                                    |
+| Variable                 | Description                                                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `-e "START_SCRIPT=$RMT"` | Url of start script, executed after `docker run` <br />_default_: ` `                                                                 |
+| `-e "SHELL=zsh"`         | Specify your default shell (`zsh`/`bash`)<br />_default_: `bash`                                                                      |
+| `-e "TZ=Asia/Tokyo"`     | Specify your timezone<br />_default_: `Etc/UTC`                                                                                       |
+| `-e "USER=username"`     | Username used for ssh login to the container<br />_default_: `ctr`                                                                    |
+| `-e "PASSWORD=passwd"`   | Password used to authenticate the ssh login<br />_default_: `localpasswd`                                                             |
+| `-e "UID=1000"`          | Specify user id for `$USER`<br />_default_: `1000`                                                                                     |
+| `-e "GID=5000"`          | Specify group id for `$USER`<br />_default_: ` `                                                                                      |
+| `-e "GROUP=groupname"`   | `$GROUP` will be ignored when `GID` is not given<br />_default_: ` `                                                                  |
+| `-e "CONDA=1"`           | Specify if conda will be installed automatically<br />_default_: ` `                                                                  |
+| `-e "CONDA_HOME=1"`      | Specify the path where conda will be installed <br />_default_: `$HOME/miniconda`                                                     |
+| `-e "CUSTOM_NVIM=1"`     | Specify Specify whether a [out-of-box neovim](https://github.com/MamoruDS/vimrc) will be automatically installed <br />_default_: ` ` |
+
+## Ports
+
+| Port      | Description                                                      |
+| --------- | ---------------------------------------------------------------- |
+| `-p 22`   | ssh server                                                       |
+| `-p 5901` | VNC server <br /> Only available for containers with `*-vnc` tag |
 
 ## Build
 
-build from dockerfile
+Build from dockerfile
 
 ```shell
 docker build --no-cache \
