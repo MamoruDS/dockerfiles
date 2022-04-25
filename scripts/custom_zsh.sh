@@ -27,7 +27,8 @@ if [ -z $HOME ]; then
     fi
 fi
 
-ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_CUSTOM="$ZSH/custom"
 
 touch $HOME/.zshrc \
     && chown $USERNAME $HOME/.zshrc \
