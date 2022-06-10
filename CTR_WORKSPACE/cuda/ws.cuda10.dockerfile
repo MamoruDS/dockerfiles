@@ -1,5 +1,5 @@
 ARG CUDA_VER=10.2
-FROM nvidia/cuda:${CUDA_VER}-devel-ubuntu18.04
+FROM nvidia/cuda:${CUDA_VER}-cudnn8-devel-ubuntu18.04
 LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
