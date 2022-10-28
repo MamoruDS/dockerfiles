@@ -33,6 +33,8 @@ SPACESHIP_PROMPT_ORDER=(
     char      # Prompt character
 )
 
+SPACESHIP_PROMPT_ASYNC=false
+
 # Char
 SPACESHIP_CHAR_SYMBOL=': '
 SPACESHIP_CHAR_SYMBOL_ROOT='$ '
