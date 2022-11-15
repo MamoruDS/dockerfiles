@@ -4,7 +4,8 @@ FROM nvidia/cuda:${CUDA_VER}-cudnn8-devel-ubuntu${BASE_UBUNTU}
 LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt install -y \
+RUN apt update \
+    && apt install -y \
     tzdata \
     locales \
     git \
@@ -18,7 +19,9 @@ RUN apt update && apt install -y \
     tmux \
     nano \
     libevent-dev \
-    libncurses-dev
+    libncurses-dev \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 
 ADD init/ /

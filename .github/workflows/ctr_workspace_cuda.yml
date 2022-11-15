@@ -1,108 +1,77 @@
 name: workspace-cuda-image-ci
 
 on:
-  workflow_dispatch:  
+    workflow_dispatch:
+        inputs:
+            is_matrix_test:
+                description: only test the validity of matrix
+                required: false
+                type: boolean
+                default: false
 env:
-  # TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  TOKEN: ${{ secrets.PACKAGE_TOKEN }}
+    # TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    TOKEN: ${{ secrets.PACKAGE_TOKEN }}
 
 jobs:
-  build-and-push-to-ghcr:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: ''
-            cuda_version: 10.1
-            base_ubuntu: 18.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: ''
-            cuda_version: 10.2
-            base_ubuntu: 18.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: 11.1
-            cuda_version: 11.1.1
-            base_ubuntu: 20.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: ''
-            cuda_version: 11.2.0
-            base_ubuntu: 20.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: ''
-            cuda_version: 11.2.1
-            base_ubuntu: 20.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: 11.2
-            cuda_version: 11.2.2
-            base_ubuntu: 20.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: ''
-            cuda_version: 11.3.0
-            base_ubuntu: 20.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: 11.3
-            cuda_version: 11.3.1
-            base_ubuntu: 20.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: ''
-            cuda_version: 11.5.0
-            base_ubuntu: 20.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: ''
-            cuda_version: 11.5.1
-            base_ubuntu: 20.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: 11.5
-            cuda_version: 11.5.2
-            base_ubuntu: 20.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: 11.7
-            cuda_version: 11.7.1
-            base_ubuntu: 22.04
-          - dockerfile: ./CTR_WORKSPACE/ws.cuda.dockerfile
-            extra_tags: 11.8,latest
-            cuda_version: 11.8.0
-            base_ubuntu: 22.04
-    env:
-      REGISTRY: ghcr.io
-      IMAGE_NAME: workspace
-    outputs:
-      outputs1: ${{ github.repository_owner }}
-      outputs2: ${{ github.actor }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Login
-        uses: docker/login-action@v2
+    load-targets:
+        runs-on: ubuntu-latest
+        outputs:
+            targets: ${{ steps.set-data.outputs.targets }}
+        steps:
+            - uses: actions/checkout@v3
+            - id: set-data
+              working-directory: ./CTR_WORKSPACE
+              run: |
+                  fp=./targets_matrix.json
+                  if [ -e $fp ]; then
+                    echo "targets=$(cat $fp | jq -c)" >> $GITHUB_OUTPUT
+                  else
+                    echo "$fp not found"
+                    exit 1
+                  fi
+    build-and-push-to-ghcr:
+        needs: load-targets
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix: ${{ fromJSON(needs.load-targets.outputs.targets) }}
+        env:
+            REGISTRY: ghcr.io
+            IMAGE_NAME: workspace
+        outputs:
+            outputs1: ${{ github.repository_owner }}
+            outputs2: ${{ github.actor }}
+        steps:
+            - uses: actions/checkout@v3
+            - name: Login
+              uses: docker/login-action@v2
 
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.repository_owner }}
-          password: ${{ env.TOKEN }}
-      - name: Downcase Repo
-        run: |
-          echo "REPO=${GITHUB_REPOSITORY_OWNER,,}/${IMAGE_NAME,,}" >> ${GITHUB_ENV}
-      - name: Build extra tags
-        # if: matrix.extra_tags != ''
-        run: |
-          IFS=,
-          for tag in $(echo ${{ matrix.cuda_version }},${{ matrix.extra_tags }}); do
-            if [ -n $tag ]; then
-              echo "${REGISTRY}/${REPO}:cuda${tag}" >> tags
-            fi
-          done
-          echo "EXTRA_TAGS<<EOF" >> $GITHUB_ENV
-          cat tags >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-      - name: Build
-        uses: docker/build-push-action@v3
-        with:
-          context: ./CTR_WORKSPACE
-          file: ${{ matrix.dockerfile }}
-          push: true
-          tags: ${{ env.EXTRA_TAGS }}
-          build-args: |
-            BASE_UBUNTU=${{ matrix.base_ubuntu }}
-            CUDA_VER=${{ matrix.cuda_version }}
-
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.repository_owner }}
+                  password: ${{ env.TOKEN }}
+            - name: Downcase Repo
+              run: |
+                  echo "REPO=${GITHUB_REPOSITORY_OWNER,,}/${IMAGE_NAME,,}" >> ${GITHUB_ENV}
+            - name: Build extra tags
+              run: |
+                  IFS=,
+                  for tag in $(echo ${{ matrix.cuda_version }},${{ matrix.extra_tags }}); do
+                    if [ -n $tag ]; then
+                      echo "${REGISTRY}/${REPO}:cuda${tag}" >> tags
+                    fi
+                  done
+                  echo "EXTRA_TAGS<<EOF" >> $GITHUB_ENV
+                  cat tags >> $GITHUB_ENV
+                  echo "EOF" >> $GITHUB_ENV
+            - name: Build
+              if: ${{ !github.event.inputs.is_matrix_test }}
+              uses: docker/build-push-action@v3
+              with:
+                  context: ./CTR_WORKSPACE
+                  file: ${{ matrix.dockerfile }}
+                  push: true
+                  tags: ${{ env.EXTRA_TAGS }}
+                  build-args: |
+                      BASE_UBUNTU=${{ matrix.base_ubuntu }}
+                      CUDA_VER=${{ matrix.cuda_version }}
