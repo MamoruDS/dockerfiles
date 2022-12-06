@@ -25,7 +25,7 @@ WORKDIR /root/dist
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && \
     apt install -y \
-    libevent-lib \
+    libevent-dev \
     libncurses-dev
 
 COPY --from=0 /tmux/tmux ./
