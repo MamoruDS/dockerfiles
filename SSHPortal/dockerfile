@@ -1,0 +1,17 @@
+FROM alpine
+LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
+
+RUN apk update \
+    && apk add --no-cache \
+        openssh \
+        curl \
+        ruby \
+        neovim \
+        nano \
+    && ssh-keygen -A \
+    && sed -ie "s/#PubkeyAuthentication/PubkeyAuthentication/g" /etc/ssh/sshd_config
+
+EXPOSE 22
+CMD curl -L https://raw.githubusercontent.com/MamoruDS/dockerfiles/sp/SSHPortal/sp_init.rb > /root/user_init.rb \
+    && ruby /root/user_init.rb \
+    ; exec /usr/sbin/sshd -D -e
