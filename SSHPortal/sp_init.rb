@@ -1,7 +1,7 @@
 #!/bin/ruby
 # frozen_string_literal: true
 
-`addgroup -g 4096 pangu`
+`addgroup -g 4096 yourgrp`
 
 Dir.entries('/home').select { |f| File.directory? File.join('/home', f) }.each do |user|
     next if user.start_with?('.')
