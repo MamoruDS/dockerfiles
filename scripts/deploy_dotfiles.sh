@@ -1,13 +1,16 @@
 # !/bin/sh
 
-if ! [ -x "$(command -v curl)" ]; then
-    echo "curl is not installed"
+error() {
+    echo "Error: $1" >&2
     exit 1
+}
+
+if ! [ -x "$(command -v curl)" ]; then
+    error "curl is not installed"
 fi
 
 if ! [ -x "$(command -v git)" ]; then
-    echo "git is not installed"
-    exit 1
+    error "git is not installed"
 fi
 
 _CMD="( \
