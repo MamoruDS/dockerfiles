@@ -1,39 +1,43 @@
 # !/bin/sh
 
-USERNAME=$1
-if [ -z $USERNAME ]; then
-    USERNAME=$(whoami)
-fi
-SHELL=$2
-CONDA_HOME=$3
+error() {
+    echo "Error: $1" >&2
+    exit 1
+}
 
-if [ -z $HOME ]; then
-    HOME="/home/$USERNAME"
-    if [ $USERNAME = 'root' ]; then
-        HOME="/root"
+if ! [ -x "$(command -v bash)" ]; then
+    error "bash is not installed"
+fi
+
+if ! [ -x "$(command -v curl)" ]; then
+    error "curl is not installed"
+fi
+
+target_user="$1"
+user_shell=${2:-bash}
+conda_home=${3:-'~/miniconda'}
+
+_install_cmd="( \
+    if [ ! -f $conda_home/bin/conda ]; then \
+        curl -fSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh -o ~/miniconda.sh \
+        && bash ~/miniconda.sh -b -p $conda_home \
+        && rm ~/miniconda.sh \
+    ; fi \
+)"
+
+_init_cmd="if [ -f "$conda_home"/bin/conda ]; then $conda_home/bin/conda init $user_shell; fi"
+
+
+if [ -z $target_user ]; then
+    eval $_install_cmd
+    eval $_init_cmd
+else
+    if [ -x "$(command -v sudo)" ]; then
+        sudo su $target_user -c "$_install_cmd"
+        sudo su $target_user -c "$_init_cmd"
+    else
+        su $target_user -c "$_install_cmd"
+        su $target_user -c "$_init_cmd"
     fi
 fi
 
-if [ "$SHELL" = "bash" ]; then
-    changeps1=True
-else
-    changeps1=False
-fi
-
-if [ -z $CONDA_HOME ]; then
-    CONDA_HOME="$HOME/miniconda"
-fi
-
-if [ -d $CONDA_HOME ]; then
-    $CONDA_HOME/bin/conda init $SHELL \
-        && $CONDA_HOME/bin/conda config --set auto_activate_base false \
-        && $CONDA_HOME/bin/conda config --set changeps1 $changeps1
-
-else
-    curl -fSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh -o $HOME/miniconda.sh \
-        && bash $HOME/miniconda.sh -b -p $CONDA_HOME \
-        && $CONDA_HOME/bin/conda init $SHELL \
-        && $CONDA_HOME/bin/conda config --set auto_activate_base false \
-        && $CONDA_HOME/bin/conda config --set changeps1 $changeps1 \
-        && rm $HOME/miniconda.sh
-fi
