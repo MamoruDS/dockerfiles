@@ -57,14 +57,6 @@ if [ -f "/start_script.sh" ]; then
         && sudo -H -u $USER bash -c "/start_script.sh"
 fi
 
-if [ "$SHELL" = 'zsh' ]; then
-    echo "> INSTALL: custom zsh"
-    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/custom_zsh.sh -o /zsh_shell.sh \
-        && chown $USER /zsh_shell.sh \
-        && chmod u+x /zsh_shell.sh \
-        && sudo -H -u $USER bash -c "/zsh_shell.sh $USER"
-fi
-
 if [ ! -z $CONDA ]; then
     if [ -z $CONDA_HOME ]; then
         CONDA_HOME="$HOME/miniconda"
@@ -85,10 +77,6 @@ if [ ! -z $CUSTOM_NVIM ]; then
         echo "> INSTALL: neovim"
         curl -sL https://raw.githubusercontent.com/MamoruDS/vimrc/main/install_neovim.sh | sh
     fi
-    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/custom_nvim.sh -o /custom_nvim.sh \
-        && chown $USER /custom_nvim.sh \
-        && chmod u+x /custom_nvim.sh \
-        && sudo -H -u $USER bash -c "/custom_nvim.sh $USER"
 fi
 
 if [ -f "/usr/bin/vncserver" ]; then
