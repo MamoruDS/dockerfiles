@@ -1,6 +1,14 @@
 # !/bin/sh
 
-echo "- container initialization start -"
+info() {
+    printf '%s\n' " > $*"
+}
+
+error() {
+    printf '%s\n' " > $*" >&2
+}
+
+info "- container initialization start -"
 
 if [ -z $SHELL ]; then
     SHELL='bash'
@@ -24,10 +32,10 @@ if [ ! -z $GID ]; then
         groupadd -g $GID $GROUP
     fi
     useradd -ms /bin/$SHELL -u $UID -g $GID $USER
-    echo "> ADD: user $USER:$GID"
+    info "ADD: user $USER:$GID"
 else
     useradd -ms /bin/$SHELL -u $UID $USER
-    echo "> ADD: user $USER"
+    info "ADD: user $USER"
 fi
 if [ -z $PASSWORD ]; then
     PASSWORD='localpasswd'
@@ -47,11 +55,11 @@ cat /dev/null > $HOME/.hushlogin && chown $USER $HOME/.hushlogin
 unset PASSWORD 
 
 if [ ! -z $START_SCRIPT ]; then
-    echo "> FETCH: script from $START_SCRIPT"
+    info "FETCH: script from $START_SCRIPT"
     curl -sSfL $START_SCRIPT -o /start_script.sh
 fi
 if [ -f "/start_script.sh" ]; then
-    echo "> EXECUTE: start script"
+    info "EXECUTE: start script"
     chown $USER /start_script.sh \
         && chmod u+x /start_script.sh \
         && sudo -H -u $USER bash -c "/start_script.sh"
@@ -61,7 +69,7 @@ if [ ! -z $CONDA ]; then
     if [ -z $CONDA_HOME ]; then
         CONDA_HOME="$HOME/miniconda"
     fi
-    echo "> INSTALL: conda in $CONDA_HOME"
+    info "INSTALL: conda in $CONDA_HOME"
     curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/conda_install.sh -o /conda_install.sh \
         && chown $USER /conda_install.sh \
         && chmod u+x /conda_install.sh \
@@ -70,17 +78,17 @@ fi
 
 if [ ! -z $CUSTOM_NVIM ]; then
     if ! [ -x "$(command -v node)" ]; then
-        echo "> INSTALL: nodejs"
+        info "INSTALL: nodejs"
         curl -sL https://install-node.now.sh/lts | bash -s -- --yes
     fi
     if ! [ -x "$(command -v nvim)" ]; then
-        echo "> INSTALL: neovim"
+        info "INSTALL: neovim"
         curl -sL https://raw.githubusercontent.com/MamoruDS/vimrc/main/install_neovim.sh | sh
     fi
 fi
 
 if [ -f "/usr/bin/vncserver" ]; then
-    echo "> START: VNC server"
+    info "START: VNC server"
     VNC=$HOME/.vnc
     mkdir -p $VNC \
         && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/init/vncpasswd.init -o $VNC/passwd \
@@ -90,7 +98,7 @@ if [ -f "/usr/bin/vncserver" ]; then
     sudo -u $USER vncserver
 fi
 
-echo "- container initialization end -"
+info "- container initialization end -"
 
 rm /*.init /*.sh 2> /dev/null
 cat << EOF > /init.sh
