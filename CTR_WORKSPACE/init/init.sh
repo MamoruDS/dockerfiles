@@ -10,6 +10,8 @@ error() {
 
 info "- container initialization start -"
 
+# channel can be branch or tag
+SCRIPT_CHANNEL=${SCRIPT_CHANNEL:-'main'}
 if [ -z $SHELL ]; then
     SHELL='bash'
 fi
@@ -70,7 +72,7 @@ if [ ! -z $CONDA ]; then
         CONDA_HOME="$HOME/miniconda"
     fi
     info "INSTALL: conda in $CONDA_HOME"
-    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/conda_install.sh -o /conda_install.sh \
+    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/$SCRIPT_CHANNEL/scripts/conda_install.sh -o /conda_install.sh \
         && chown $USER /conda_install.sh \
         && chmod u+x /conda_install.sh \
         && sudo -H -u $USER bash -c "/conda_install.sh $USER $SHELL $CONDA_HOME"
@@ -87,8 +89,8 @@ if [ -f "/usr/bin/vncserver" ]; then
     info "START: VNC server"
     VNC=$HOME/.vnc
     mkdir -p $VNC \
-        && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/init/vncpasswd.init -o $VNC/passwd \
-        && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/init/xstartup.init -o $VNC/xstartup \
+        && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/$SCRIPT_CHANNEL/CTR_WORKSPACE/init/vncpasswd.init -o $VNC/passwd \
+        && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/$SCRIPT_CHANNEL/CTR_WORKSPACE/init/xstartup.init -o $VNC/xstartup \
         && chown -R $USER $VNC \
         && chmod 755 $VNC/xstartup
     sudo -u $USER vncserver
