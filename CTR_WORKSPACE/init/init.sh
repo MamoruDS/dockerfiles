@@ -77,10 +77,6 @@ if [ ! -z $CONDA ]; then
 fi
 
 if [ ! -z $CUSTOM_NVIM ]; then
-    if ! [ -x "$(command -v node)" ]; then
-        info "INSTALL: nodejs"
-        curl -sL https://install-node.now.sh/lts | bash -s -- --yes
-    fi
     if ! [ -x "$(command -v nvim)" ]; then
         info "INSTALL: neovim"
         curl -sL https://raw.githubusercontent.com/MamoruDS/vimrc/main/install_neovim.sh | sh
