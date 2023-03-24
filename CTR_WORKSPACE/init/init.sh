@@ -12,48 +12,42 @@ info "- container initialization start -"
 
 # channel can be branch or tag
 SCRIPT_CHANNEL=${SCRIPT_CHANNEL:-'main'}
-if [ -z $SHELL ]; then
-    SHELL='bash'
-fi
 
-if [ -z $TZ ]; then
-    TZ='Etc/UTC'
-fi
+TZ=${TZ:-'Etc/UTC'}
 ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-if [ -z $UID ]; then
-    UID='1000'
-fi
-if [ -z $USER ]; then
-    USER='ctr'
-fi
-if [ ! -z $GID ]; then
-    if [ -z $GROUP ]; then
-        groupadd -g $GID $USER
+_SHELL=${CTR_SHELL:-'bash'}
+
+_UID=${CTR_UID:-'1000'}
+_USER=${CTR_USER:-'ctr'}
+_GID=${CTR_GID:-''}
+_GROUP=${CTR_GROUP:-''}
+PASSWORD=${PASSWORD:-'localpasswd'}
+
+if [ ! -z $_GID ]; then
+    if [ -z $_GROUP ]; then
+        groupadd -g $_GID $_USER
     else
-        groupadd -g $GID $GROUP
+        groupadd -g $_GID $_GROUP
     fi
-    useradd -ms /bin/$SHELL -u $UID -g $GID $USER
-    info "ADD: user $USER:$GID"
+    useradd -ms /bin/$_SHELL -u $_UID -g $_GID $_USER
+    info "ADD: user $_USER:$_GID"
 else
-    useradd -ms /bin/$SHELL -u $UID $USER
-    info "ADD: user $USER"
+    useradd -ms /bin/$_SHELL -u $_UID $_USER
+    info "ADD: user $_USER"
 fi
-if [ -z $PASSWORD ]; then
-    PASSWORD='localpasswd'
-fi
-if [ $USER = 'root' ]; then
+
+if [ $_USER = 'root' ]; then
     HOME="/root"
 else
-    HOME="/home/$USER"
+    HOME="/home/$_USER"
 fi
 
-
-usermod -aG sudo $USER \
-    && echo $USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER \
+usermod -aG sudo $_USER \
+    && echo $_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$_USER \
     && echo 'Set disable_coredump false' >> /etc/sudo.conf \
-    && echo ${USER}:${PASSWORD}|chpasswd
-cat /dev/null > $HOME/.hushlogin && chown $USER $HOME/.hushlogin
+    && echo $_USER:$PASSWORD|chpasswd
+cat /dev/null > $HOME/.hushlogin && chown $_USER $HOME/.hushlogin
 unset PASSWORD 
 
 if [ ! -z $START_SCRIPT ]; then
@@ -62,9 +56,9 @@ if [ ! -z $START_SCRIPT ]; then
 fi
 if [ -f "/start_script.sh" ]; then
     info "EXECUTE: start script"
-    chown $USER /start_script.sh \
+    chown $_USER /start_script.sh \
         && chmod u+x /start_script.sh \
-        && sudo -H -u $USER bash -c "/start_script.sh"
+        && sudo -H -u $_USER bash -c "/start_script.sh"
 fi
 
 if [ ! -z $CONDA ]; then
@@ -73,9 +67,9 @@ if [ ! -z $CONDA ]; then
     fi
     info "INSTALL: conda in $CONDA_HOME"
     curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/$SCRIPT_CHANNEL/scripts/conda_install.sh -o /conda_install.sh \
-        && chown $USER /conda_install.sh \
+        && chown $_USER /conda_install.sh \
         && chmod u+x /conda_install.sh \
-        && sudo -H -u $USER bash -c "/conda_install.sh $USER $SHELL $CONDA_HOME"
+        && sudo -H -u $_USER bash -c "/conda_install.sh $_USER $_SHELL $CONDA_HOME"
 fi
 
 if [ ! -z $CUSTOM_NVIM ]; then
@@ -91,9 +85,9 @@ if [ -f "/usr/bin/vncserver" ]; then
     mkdir -p $VNC \
         && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/$SCRIPT_CHANNEL/CTR_WORKSPACE/init/vncpasswd.init -o $VNC/passwd \
         && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/$SCRIPT_CHANNEL/CTR_WORKSPACE/init/xstartup.init -o $VNC/xstartup \
-        && chown -R $USER $VNC \
+        && chown -R $_USER $VNC \
         && chmod 755 $VNC/xstartup
-    sudo -u $USER vncserver
+    sudo -u $_USER vncserver
 fi
 
 info "- container initialization end -"
@@ -102,8 +96,8 @@ rm /*.init /*.sh 2> /dev/null
 cat << EOF > /init.sh
 #!/bin/sh
 if [ ! -f '/.init' ]; then
-    cd $HOME && su $USER || su $USER
+    cd $HOME && su $_USER || su $_USER
     exit 0
 fi
 EOF
-cd $HOME && su $USER
+cd $HOME && su $_USER
