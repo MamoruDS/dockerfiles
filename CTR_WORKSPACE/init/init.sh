@@ -67,7 +67,7 @@ info "DEPLOY: dotfiles"
 if [ ! -z $CONDA ]; then
     export DOTFILES_PACKAGES="$DOTFILES_PACKAGES,conda"
 fi
-curl -sfL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/deploy_dotfiles.sh | sh -s -- $_USER
+curl -sfL https://raw.githubusercontent.com/MamoruDS/dockerfiles/$SCRIPT_CHANNEL/scripts/deploy_dotfiles.sh | sh -s -- $_USER
 
 if [ ! -z $CONDA ]; then
     if [ -z $CONDA_HOME ]; then
