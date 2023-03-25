@@ -11,18 +11,18 @@ error() {
 info "- container initialization start -"
 
 # channel can be branch or tag
-SCRIPT_CHANNEL=${SCRIPT_CHANNEL:-'main'}
+SCRIPT_CHANNEL=${SCRIPT_CHANNEL:-main}
 
-TZ=${TZ:-'Etc/UTC'}
+TZ=${TZ:-Etc/UTC}
 ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-_SHELL=${CTR_SHELL:-'bash'}
+_SHELL=${CTR_SHELL:-bash}
 
-_UID=${CTR_UID:-'1000'}
-_USER=${CTR_USER:-'ctr'}
-_GID=${CTR_GID:-''}
-_GROUP=${CTR_GROUP:-''}
-PASSWORD=${PASSWORD:-'localpasswd'}
+_UID=${CTR_UID:-1000}
+_USER=${CTR_USER:-ctr}
+_GID=${CTR_GID:-}
+_GROUP=${CTR_GROUP:-}
+PASSWORD=${PASSWORD:-localpasswd}
 
 if [ ! -z $_GID ]; then
     if [ -z $_GROUP ]; then
@@ -47,7 +47,6 @@ usermod -aG sudo $_USER \
     && echo $_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$_USER \
     && echo 'Set disable_coredump false' >> /etc/sudo.conf \
     && echo $_USER:$PASSWORD|chpasswd
-cat /dev/null > $HOME/.hushlogin && chown $_USER $HOME/.hushlogin
 unset PASSWORD 
 
 if [ ! -z $START_SCRIPT ]; then
