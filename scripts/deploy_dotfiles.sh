@@ -16,7 +16,10 @@ fi
 _CMD="( \
     echo '[ -f ~/.zshrc.dot ] && . ~/.zshrc.dot' > ~/.zshrc \
     && cd ~ \
-    && export DOTFILES_LOCAL=~/.dot.local.toml \
+    && export DOTFILES_PACKAGES=$DOTFILES_PACKAGES \
+    && export DOTTER_BIN_DIR=$DOTTER_BIN_DIR \
+    && export DOTFILES_ROOT=$DOTFILES_ROOT \
+    && export DOTFILES_LOCAL=${DOTFILES_LOCAL:-~/.dot.local.toml} \
     && curl -fsSL https://raw.githubusercontent.com/MamoruDS/dotfiles/main/install.sh | sh
 )"
 
