@@ -66,7 +66,7 @@ if [ ! -z $CONDA ]; then
         CONDA_HOME="$HOME/miniconda"
     fi
     info "INSTALL: conda in $CONDA_HOME"
-    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/$SCRIPT_CHANNEL/scripts/conda_install.sh -o /conda_install.sh \
+    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/$SCRIPT_CHANNEL/scripts/install_conda.sh -o /conda_install.sh \
         && chown $_USER /conda_install.sh \
         && chmod u+x /conda_install.sh \
         && sudo -H -u $_USER bash -c "/conda_install.sh $_USER $_SHELL $CONDA_HOME"
