@@ -57,6 +57,9 @@ info "DEPLOY: dotfiles"
 if [ ! -z $CONDA ]; then
     export DOTFILES_PACKAGES="$DOTFILES_PACKAGES,conda"
 fi
+if [ ! -z $NVIM ]; then
+    export DOTFILES_PACKAGES="$DOTFILES_PACKAGES,nvim"
+fi
 curl -sfL $REPO_URL/$SCRIPT_CHANNEL/scripts/deploy_dotfiles.sh | sh -s -- $_USER
 
 if [ ! -z $CONDA ]; then
