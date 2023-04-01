@@ -59,10 +59,12 @@ jobs:
                   echo "REPO=${GITHUB_REPOSITORY_OWNER,,}/${IMAGE_NAME,,}" >> ${GITHUB_ENV}
             - name: Build extra tags
               run: |
+                  SHA="${GITHUB_SHA::7}"
                   IFS=,
                   for tag in $(echo ${{ matrix.cuda_version }},${{ matrix.extra_tags }}); do
                     if [ -n $tag ]; then
                       echo "${REGISTRY}/${REPO}:cuda${tag}" >> tags
+                      echo "${REGISTRY}/${REPO}:cuda${tag}.${SHA}" >> tags
                     fi
                   done
                   echo "EXTRA_TAGS<<EOF" >> $GITHUB_ENV

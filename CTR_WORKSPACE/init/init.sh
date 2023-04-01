@@ -1,115 +1,106 @@
 # !/bin/sh
 
-echo "- container initialization start -"
+info() {
+    printf '%s\n' " > $*"
+}
 
-if [ -z $SHELL ]; then
-    SHELL='bash'
-fi
+error() {
+    printf '%s\n' " > $*" >&2
+}
 
-if [ -z $TZ ]; then
-    TZ='Etc/UTC'
-fi
+info "- container initialization start -"
+
+# channel can be branch or tag
+REPO_URL='https://raw.githubusercontent.com/MamoruDS/dockerfiles'
+SCRIPT_CHANNEL=${SCRIPT_CHANNEL:-main}
+
+TZ=${TZ:-Etc/UTC}
 ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-if [ -z $UID ]; then
-    UID='1000'
-fi
-if [ -z $USER ]; then
-    USER='ctr'
-fi
-if [ ! -z $GID ]; then
-    if [ -z $GROUP ]; then
-        groupadd -g $GID $USER
+_SHELL=${CTR_SHELL:-bash}
+
+_UID=${CTR_UID:-1000}
+_USER=${CTR_USER:-ctr}
+_GID=${CTR_GID:-}
+_GROUP=${CTR_GROUP:-}
+PASSWORD=${PASSWORD:-localpasswd}
+
+if [ ! -z $_GID ]; then
+    if [ -z $_GROUP ]; then
+        groupadd -g $_GID $_USER
     else
-        groupadd -g $GID $GROUP
+        groupadd -g $_GID $_GROUP
     fi
-    useradd -ms /bin/$SHELL -u $UID -g $GID $USER
-    echo "> ADD: user $USER:$GID"
+    useradd -ms /bin/$_SHELL -u $_UID -g $_GID $_USER
+    info "ADD: user $_USER:$_GID"
 else
-    useradd -ms /bin/$SHELL -u $UID $USER
-    echo "> ADD: user $USER"
+    useradd -ms /bin/$_SHELL -u $_UID $_USER
+    info "ADD: user $_USER"
 fi
-if [ -z $PASSWORD ]; then
-    PASSWORD='localpasswd'
-fi
-if [ $USER = 'root' ]; then
+
+if [ $_USER = 'root' ]; then
     HOME="/root"
 else
-    HOME="/home/$USER"
+    HOME="/home/$_USER"
 fi
 
-
-usermod -aG sudo $USER \
-    && echo $USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER \
+usermod -aG sudo $_USER \
+    && echo $_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$_USER \
     && echo 'Set disable_coredump false' >> /etc/sudo.conf \
-    && echo ${USER}:${PASSWORD}|chpasswd
-cat /dev/null > $HOME/.hushlogin && chown $USER $HOME/.hushlogin
+    && echo $_USER:$PASSWORD|chpasswd
 unset PASSWORD 
 
-if [ ! -z $START_SCRIPT ]; then
-    echo "> FETCH: script from $START_SCRIPT"
-    curl -sSfL $START_SCRIPT -o /start_script.sh
-fi
-if [ -f "/start_script.sh" ]; then
-    echo "> EXECUTE: start script"
-    chown $USER /start_script.sh \
-        && chmod u+x /start_script.sh \
-        && sudo -H -u $USER bash -c "/start_script.sh"
-fi
+info "INSTALL: starship"
+curl -sf https://starship.rs/install.sh | sh -s -- -y > /dev/null 2>&1
 
-if [ "$SHELL" = 'zsh' ]; then
-    echo "> INSTALL: custom zsh"
-    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/custom_zsh.sh -o /zsh_shell.sh \
-        && chown $USER /zsh_shell.sh \
-        && chmod u+x /zsh_shell.sh \
-        && sudo -H -u $USER bash -c "/zsh_shell.sh $USER"
+info "DEPLOY: dotfiles"
+if [ ! -z $CONDA ]; then
+    export DOTFILES_PACKAGES="$DOTFILES_PACKAGES,conda"
 fi
+if [ ! -z $NVIM ]; then
+    export DOTFILES_PACKAGES="$DOTFILES_PACKAGES,nvim"
+fi
+curl -sfL $REPO_URL/$SCRIPT_CHANNEL/scripts/deploy_dotfiles.sh | sh -s -- $_USER
 
 if [ ! -z $CONDA ]; then
     if [ -z $CONDA_HOME ]; then
         CONDA_HOME="$HOME/miniconda"
     fi
-    echo "> INSTALL: conda in $CONDA_HOME"
-    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/conda_install.sh -o /conda_install.sh \
-        && chown $USER /conda_install.sh \
-        && chmod u+x /conda_install.sh \
-        && sudo -H -u $USER bash -c "/conda_install.sh $USER $SHELL $CONDA_HOME"
+    info "INSTALL: conda in $CONDA_HOME"
+    curl -sfL $REPO_URL/$SCRIPT_CHANNEL/scripts/install_conda.sh | sh -s -- $_USER $_SHELL $CONDA_HOME
 fi
 
-if [ ! -z $CUSTOM_NVIM ]; then
-    if ! [ -x "$(command -v node)" ]; then
-        echo "> INSTALL: nodejs"
-        curl -sL https://install-node.now.sh/lts | bash -s -- --yes
-    fi
+if [ ! -z $NVIM ]; then
     if ! [ -x "$(command -v nvim)" ]; then
-        echo "> INSTALL: neovim"
-        curl -sL https://raw.githubusercontent.com/MamoruDS/vimrc/main/install_neovim.sh | sh
+        info "INSTALL: neovim"
+        curl -sfL $REPO_URL/$SCRIPT_CHANNEL/scripts/install_neovim.sh | sh
     fi
-    curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/scripts/custom_nvim.sh -o /custom_nvim.sh \
-        && chown $USER /custom_nvim.sh \
-        && chmod u+x /custom_nvim.sh \
-        && sudo -H -u $USER bash -c "/custom_nvim.sh $USER"
 fi
 
 if [ -f "/usr/bin/vncserver" ]; then
-    echo "> START: VNC server"
+    info "START: VNC server"
     VNC=$HOME/.vnc
     mkdir -p $VNC \
-        && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/init/vncpasswd.init -o $VNC/passwd \
-        && curl -sL https://raw.githubusercontent.com/MamoruDS/dockerfiles/main/CTR_WORKSPACE/init/xstartup.init -o $VNC/xstartup \
-        && chown -R $USER $VNC \
+        && curl -sfL $REPO_URL/$SCRIPT_CHANNEL/CTR_WORKSPACE/init/vncpasswd.init -o $VNC/passwd \
+        && curl -sfL $REPO_URL/$SCRIPT_CHANNEL/CTR_WORKSPACE/init/xstartup.init -o $VNC/xstartup \
+        && chown -R $_USER $VNC \
         && chmod 755 $VNC/xstartup
-    sudo -u $USER vncserver
+    sudo -u $_USER vncserver
 fi
 
-echo "- container initialization end -"
+info "EXECUTE: start script"
+if [ ! -z $START_SCRIPT ]; then
+    sudo -u $_USER sh -c "(cd ~ && curl -sSfL $START_SCRIPT | sh)"
+fi
+
+info "- container initialization end -"
 
 rm /*.init /*.sh 2> /dev/null
 cat << EOF > /init.sh
 #!/bin/sh
 if [ ! -f '/.init' ]; then
-    cd $HOME && su $USER || su $USER
+    cd $HOME && su $_USER || su $_USER
     exit 0
 fi
 EOF
-cd $HOME && su $USER
+cd $HOME && su $_USER
