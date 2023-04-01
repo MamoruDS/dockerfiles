@@ -1,7 +1,5 @@
 # CTR_WORKSPACE
 
-[![](https://img.shields.io/docker/pulls/mamoruio/workspace?style=flat-square)](https://hub.docker.com/r/mamoruio/workspace)
-
 This repository offers Ubuntu-based images (CUDA ready) allowing for easy deployment of a portable workspace on your host. These images come with pre-configured [dotfiles](https://github.com/MamoruDS/dotfiles), SSH accessibility, and GPU support.
 
 Our available image can be found on the Github Package [page](https://github.com/MamoruDS/dockerfiles/pkgs/container/workspace), you can also build any of these images yourself.
