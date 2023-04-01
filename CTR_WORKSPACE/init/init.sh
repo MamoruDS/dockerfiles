@@ -67,10 +67,10 @@ if [ ! -z $CONDA ]; then
     curl -sfL $REPO_URL/$SCRIPT_CHANNEL/scripts/install_conda.sh | sh -s -- $_USER $_SHELL $CONDA_HOME
 fi
 
-if [ ! -z $CUSTOM_NVIM ]; then
+if [ ! -z $NVIM ]; then
     if ! [ -x "$(command -v nvim)" ]; then
         info "INSTALL: neovim"
-        curl -sfL https://raw.githubusercontent.com/MamoruDS/vimrc/main/install_neovim.sh | sh
+        curl -sfL $REPO_URL/$SCRIPT_CHANNEL/scripts/install_neovim.sh | sh
     fi
 fi
 
