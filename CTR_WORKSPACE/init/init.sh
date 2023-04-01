@@ -53,6 +53,9 @@ unset PASSWORD
 info "INSTALL: starship"
 curl -sf https://starship.rs/install.sh | sh -s -- -y > /dev/null 2>&1
 
+info "INSTALL: fzf"
+curl -sfL https://raw.githubusercontent.com/junegunn/fzf/master/install | bash -s -- --bin
+
 info "DEPLOY: dotfiles"
 if [ ! -z $CONDA ]; then
     export DOTFILES_PACKAGES="$DOTFILES_PACKAGES,conda"

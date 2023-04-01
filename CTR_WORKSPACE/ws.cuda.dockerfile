@@ -17,9 +17,7 @@ RUN apt update \
     dnsutils \
     iputils-ping \
     tmux \
-    nano \
     rsync \
-    fzf \
     libevent-dev \
     libncurses-dev \
     && apt clean \
