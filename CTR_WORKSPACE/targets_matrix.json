@@ -74,7 +74,7 @@
     },
     {
       "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
-      "extra_tags": "11.8,latest",
+      "extra_tags": "11.8",
       "cuda_version": "11.8.0",
       "base_ubuntu": "22.04"
     }
