@@ -2,45 +2,44 @@
 
 [![](https://img.shields.io/docker/pulls/mamoruio/workspace?style=flat-square)](https://hub.docker.com/r/mamoruio/workspace)
 
-All-in-one image for workspace with `conda`, `vnc`, ssh-enabled ...etc
+This repository offers Ubuntu-based images (CUDA ready) allowing for easy deployment of a portable workspace on your host. These images come with pre-configured [dotfiles](https://github.com/MamoruDS/dotfiles), SSH accessibility, and GPU support.
 
-## Tags
+Our available image can be found on the Github Package [page](https://github.com/MamoruDS/dockerfiles/pkgs/container/workspace), you can also build any of these images yourself.
 
--   `base`
--   `base-vnc`
--   `cuda11.{}`
--   `cuda11.{}-vnc`
+> ⚠ ️Please note that all images on Docker Hub have expired, and Github Container Registry is now the only source for our images.
 
-## Quick examples
+## Usage
+
+Quick examples
 
 ```shell
-docker run -dt -e "USER=yourname" \
-               -e "SHELL=zsh" \
-               -e "CONDA=1" \
-               --name ctr \
-               --hostname "KLBS20CX" \
-               mamoruio/workspace:base
+docker run -dt --gpus all \
+               -e CTR_USER=admin \
+               -e SHELL=zsh \
+               -e CONDA=1 \
+               --name ctr_workspace \
+               --hostname "ws@$HOST" \
+               ghcr.io/mamoruds/workspace:cuda11.2
 ```
 
 then attach to container's shell
 
 ```shell
-docker exec -it --user yourname ctr zsh
+docker exec -it --user admin ctr zsh
 ```
 
 or connect with `ssh`
 
 ```shell
-docker run -dt \
-        -e "USER=yourname" \
-        -e "SHELL=zsh" \
-        -e "PASSWORD=passwd" \
-        -p 8022:22 \
-        --name ctr \
-        --hostname "container_ws" \
-        mamoruio/workspace:base
+docker run -dt --gpus all \
+               -e CTR_USER=admin \
+               -e PASSWORD=passwd \
+               -p 8022:22 \
+               --name ctr_workspace \
+               --hostname "ws@$HOST" \
+               ghcr.io/mamoruds/workspace:cuda11.2
 
-ssh yourname@127.0.0.1 -p 8022
+ssh admin@127.0.0.1 -p 8022
 ```
 
 ## Environment variables
