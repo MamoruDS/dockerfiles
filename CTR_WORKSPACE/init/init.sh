@@ -49,17 +49,6 @@ usermod -aG sudo $_USER \
     && echo $_USER:$PASSWORD|chpasswd
 unset PASSWORD 
 
-if [ ! -z $START_SCRIPT ]; then
-    info "FETCH: script from $START_SCRIPT"
-    curl -sSfL $START_SCRIPT -o /start_script.sh
-fi
-if [ -f "/start_script.sh" ]; then
-    info "EXECUTE: start script"
-    chown $_USER /start_script.sh \
-        && chmod u+x /start_script.sh \
-        && sudo -H -u $_USER bash -c "/start_script.sh"
-fi
-
 info "INSTALL: starship"
 curl -sf https://starship.rs/install.sh | sh -s -- -y > /dev/null 2>&1
 
@@ -96,6 +85,11 @@ if [ -f "/usr/bin/vncserver" ]; then
         && chown -R $_USER $VNC \
         && chmod 755 $VNC/xstartup
     sudo -u $_USER vncserver
+fi
+
+info "EXECUTE: start script"
+if [ ! -z $START_SCRIPT ]; then
+    sudo -u $_USER sh -c "(cd ~ && curl -sSfL $START_SCRIPT | sh)"
 fi
 
 info "- container initialization end -"
