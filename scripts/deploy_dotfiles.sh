@@ -21,9 +21,9 @@ _CMD="( \
     && export DOTFILES_LOCAL=${DOTFILES_LOCAL:-~/.dot.local.toml} \
     && curl -fsSL https://raw.githubusercontent.com/MamoruDS/dotfiles/main/install.sh | sh \
     && echo '[ -f ~/.zshrc.dot ] && . ~/.zshrc.dot' >> ~/.zshrc \
-    && if [ -n \$DOTTER_BIN_DIR ] && echo 'DOTTER_BIN_DIR=\$DOTTER_BIN_DIR' >> ~/.zshrc \
-    && if [ -n \$DOTFILES_ROOT ] && echo 'DOTFILES_ROOT=\$DOTFILES_ROOT' >> ~/.zshrc \
-    && if [ -n \$DOTFILES_LOCAL ] && echo 'DOTTER_BIN_DIR=\$DOTFILES_LOCAL' >> ~/.zshrc
+    && if [ -n \"\$DOTTER_BIN_DIR\" ]; then echo \"DOTTER_BIN_DIR=\$DOTTER_BIN_DIR\" >> ~/.zshrc ; fi \
+    && if [ -n \"\$DOTFILES_ROOT\" ]; then echo \"DOTFILES_ROOT=\$DOTFILES_ROOT\" >> ~/.zshrc ; fi \
+    && if [ -n \"\$DOTFILES_LOCAL\" ]; then echo \"DOTFILES_LOCAL=\$DOTFILES_LOCAL\" >> ~/.zshrc ; fi
 )"
 
 target_user="$1"
