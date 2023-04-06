@@ -1,4 +1,4 @@
-# !/bin/sh
+#!/bin/sh
 
 info() {
     printf '%s\n' " > $*"

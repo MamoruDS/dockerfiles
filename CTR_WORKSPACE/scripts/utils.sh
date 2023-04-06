@@ -1,4 +1,4 @@
-# !/bin/sh
+#!/bin/sh
 # v0.1.1
 
 cdr() {
