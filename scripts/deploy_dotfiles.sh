@@ -1,16 +1,20 @@
 #!/bin/sh
 
-error() {
-    echo "Error: $1" >&2
+info() {
+    printf '%s\n' "Info: $*"
+}
+
+panic() {
+    printf '%s\n' "Error: $*" >&2
     exit 1
 }
 
 if ! [ -x "$(command -v curl)" ]; then
-    error "curl is not installed"
+    panic "curl is not installed"
 fi
 
 if ! [ -x "$(command -v git)" ]; then
-    error "git is not installed"
+    panic "git is not installed"
 fi
 
 _CMD="( \
