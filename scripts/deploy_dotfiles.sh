@@ -24,11 +24,7 @@ _CMD="( \
     && export DOTTER_BIN_DIR=$DOTTER_BIN_DIR \
     && export DOTFILES_ROOT=$DOTFILES_ROOT \
     && export DOTFILES_LOCAL=${DOTFILES_LOCAL:-~/.dot.local.toml} \
-    && curl -fsSL ${_DEPLOY_SCRIPT_URL} | sh \
-    && echo '[ -f ~/.zshrc.dot ] && . ~/.zshrc.dot' >> ~/.zshrc \
-    && if [ -n \"\$DOTTER_BIN_DIR\" ]; then echo \"DOTTER_BIN_DIR=\$DOTTER_BIN_DIR\" >> ~/.zshrc ; fi \
-    && if [ -n \"\$DOTFILES_ROOT\" ]; then echo \"DOTFILES_ROOT=\$DOTFILES_ROOT\" >> ~/.zshrc ; fi \
-    && if [ -n \"\$DOTFILES_LOCAL\" ]; then echo \"DOTFILES_LOCAL=\$DOTFILES_LOCAL\" >> ~/.zshrc ; fi
+    && curl -fsSL ${_DEPLOY_SCRIPT_URL} | sh
 )"
 
 target_user="$1"
