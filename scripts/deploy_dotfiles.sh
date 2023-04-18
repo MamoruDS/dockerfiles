@@ -23,7 +23,7 @@ _CMD="( \
     && export DOTFILES_PACKAGES=$DOTFILES_PACKAGES \
     && export DOTTER_BIN_DIR=$DOTTER_BIN_DIR \
     && export DOTFILES_ROOT=$DOTFILES_ROOT \
-    && export DOTFILES_LOCAL=${DOTFILES_LOCAL:-~/.dot.local.toml} \
+    && export DOTFILES_LOCAL=${DOTFILES_LOCAL:-'$HOME/.dot.local.toml'} \
     && curl -fsSL ${_DEPLOY_SCRIPT_URL} | sh
 )"
 
