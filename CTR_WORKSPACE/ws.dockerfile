@@ -1,4 +1,5 @@
-FROM ubuntu:22.04
+ARG BASE_UBUNTU=22.04
+FROM ubuntu:${BASE_UBUNTU}
 LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
