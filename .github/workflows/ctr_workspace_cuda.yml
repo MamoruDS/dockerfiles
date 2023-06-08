@@ -89,7 +89,7 @@ jobs:
                     echo "EOF" >> $GITHUB_ENV
                   fi
             - name: Build
-              if: ${{ !fromJSON(github.event.inputs.is_matrix_test) }}
+              if: ${{ !fromJSON(github.event.inputs.is_matrix_test) && env.EXTRA_TAGS }}
               uses: docker/build-push-action@v3
               with:
                   context: ./CTR_WORKSPACE
