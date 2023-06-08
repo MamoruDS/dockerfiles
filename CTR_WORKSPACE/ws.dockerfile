@@ -1,10 +1,13 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt install -y \
+RUN apt update \
+    && apt install -y \
+    tzdata \
     locales \
     git \
+    gnupg \
     sudo \
     zsh \
     openssh-server \
@@ -12,7 +15,11 @@ RUN apt update && apt install -y \
     dnsutils \
     iputils-ping \
     tmux \
-    nano
+    rsync \
+    libevent-dev \
+    libncurses-dev \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 
 ADD init/ /
