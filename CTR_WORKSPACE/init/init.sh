@@ -10,6 +10,10 @@ error() {
 
 info "- container initialization start -"
 
+info "RESET: SSH Host Keys"
+rm -f /etc/ssh/ssh_host_*
+ssh-keygen -A
+
 # channel can be branch or tag
 REPO_URL='https://raw.githubusercontent.com/MamoruDS/dockerfiles'
 SCRIPT_CHANNEL=${SCRIPT_CHANNEL:-main}

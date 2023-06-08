@@ -1,6 +1,12 @@
 {
   "include": [
     {
+      "dockerfile": "./CTR_WORKSPACE/ws.dockerfile",
+      "extra_tags": "22.04",
+      "cuda_version": "",
+      "base_ubuntu": "22.04"
+    },
+    {
       "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
       "extra_tags": "",
       "cuda_version": "10.1",
