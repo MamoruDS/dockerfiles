@@ -1,4 +1,4 @@
-name: workspace-cuda-image-ci
+name: workspace-image-ci
 
 on:
     workflow_dispatch:
