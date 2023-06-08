@@ -64,27 +64,30 @@ jobs:
                   IFS=,
                   for tag in $(echo ${{ matrix.cuda_version }},${{ matrix.extra_tags }}); do
                     if [ -n $tag ]; then
-                      echo "${REGISTRY}/${REPO}:cuda${tag}" >> tags
-                      echo "${REGISTRY}/${REPO}:cuda${tag}.${SHA}" >> tags
+                      echo "${REGISTRY}/${REPO}:cuda${tag}" >> .tags
+                      echo "${REGISTRY}/${REPO}:cuda${tag}.${SHA}" >> .tags
                     fi
                   done
                   echo "EXTRA_TAGS<<EOF" >> $GITHUB_ENV
-                  cat tags >> $GITHUB_ENV
+                  cat .tags >> $GITHUB_ENV
                   echo "EOF" >> $GITHUB_ENV
             - name: Build tags for non-CUDA image
+              # matrix.extra_tags is required
               if: ${{ !matrix.cuda_version }}
               run: |
                   SHA="${GITHUB_SHA::7}"
                   IFS=,
-                  for tag in $(echo ${{ matrix.base_ubuntu }},${{ matrix.extra_tags }}); do
+                  for tag in $(echo ${{ matrix.extra_tags }}); do
                     if [ -n $tag ]; then
-                      echo "${REGISTRY}/${REPO}:${tag}" >> tags
-                      echo "${REGISTRY}/${REPO}:${tag}.${SHA}" >> tags
+                      echo "${REGISTRY}/${REPO}:${tag}" >> .tags
+                      echo "${REGISTRY}/${REPO}:${tag}.${SHA}" >> .tags
                     fi
                   done
-                  echo "EXTRA_TAGS<<EOF" >> $GITHUB_ENV
-                  cat tags >> $GITHUB_ENV
-                  echo "EOF" >> $GITHUB_ENV
+                  if [ -f .tags ]; then
+                    echo "EXTRA_TAGS<<EOF" >> $GITHUB_ENV
+                    cat .tags >> $GITHUB_ENV
+                    echo "EOF" >> $GITHUB_ENV
+                  fi
             - name: Build
               if: ${{ !fromJSON(github.event.inputs.is_matrix_test) }}
               uses: docker/build-push-action@v3
