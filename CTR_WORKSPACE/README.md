@@ -71,7 +71,9 @@ Build from dockerfile. To find the valid corresponding CUDA and Ubuntu versions,
 ```shell
 docker build --no-cache \
              -t mamoruio/workspace:local \
-             -f ws.dockerfile .
+             -f ws.dockerfile \
+             --build-arg "BASE_UBUNTU=22.04" \
+             .
 
 docker build --no-cache \
              -t mamoruio/workspace:local.cuda11.3 \
