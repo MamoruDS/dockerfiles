@@ -49,6 +49,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: Login
+              if: ${{ !env.ACT }}
               uses: docker/login-action@v2
               with:
                   registry: ${{ env.REGISTRY }}
@@ -89,7 +90,7 @@ jobs:
                     echo "EOF" >> $GITHUB_ENV
                   fi
             - name: Build
-              if: ${{ !fromJSON(github.event.inputs.is_matrix_test) && env.EXTRA_TAGS }}
+              if: ${{ !env.ACT && !fromJSON(github.event.inputs.is_matrix_test) && env.EXTRA_TAGS }}
               uses: docker/build-push-action@v3
               with:
                   context: ./CTR_WORKSPACE
