@@ -13,6 +13,12 @@ on:
                 required: false
                 type: boolean
                 default: false
+            matrix_jq_selection:
+                description: jq select method expression used to filter the matrix
+                required: false
+                type: string
+                default: true
+
 env:
     # TOKEN: ${{ secrets.GITHUB_TOKEN }}
     TOKEN: ${{ secrets.PACKAGE_TOKEN }}
@@ -29,7 +35,12 @@ jobs:
               run: |
                   fp=./targets_matrix.json
                   if [ -e $fp ]; then
-                    echo "targets=$(cat $fp | jq -c)" >> $GITHUB_OUTPUT
+                    jq_sel='${{ github.event.inputs.matrix_jq_selection }}'
+                    if [ -z $jq_sel ]; then
+                      jq_sel='true'
+                    fi
+                    matrix=$(cat $fp | jq -c "{ include: [ .include[] | select($jq_sel) ] }")
+                    echo "targets=$matrix" >> $GITHUB_OUTPUT
                   else
                     echo "$fp not found"
                     exit 1
@@ -49,6 +60,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: Login
+              if: ${{ !env.ACT }}
               uses: docker/login-action@v2
               with:
                   registry: ${{ env.REGISTRY }}
@@ -89,7 +101,7 @@ jobs:
                     echo "EOF" >> $GITHUB_ENV
                   fi
             - name: Build
-              if: ${{ !fromJSON(github.event.inputs.is_matrix_test) && env.EXTRA_TAGS }}
+              if: ${{ !env.ACT && !fromJSON(github.event.inputs.is_matrix_test) && env.EXTRA_TAGS }}
               uses: docker/build-push-action@v3
               with:
                   context: ./CTR_WORKSPACE

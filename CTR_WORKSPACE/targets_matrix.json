@@ -20,6 +20,12 @@
     },
     {
       "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
+      "extra_tags": "11.0",
+      "cuda_version": "11.0.3",
+      "base_ubuntu": "20.04"
+    },
+    {
+      "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
       "extra_tags": "11.1",
       "cuda_version": "11.1.1",
       "base_ubuntu": "20.04"
