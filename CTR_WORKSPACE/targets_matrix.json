@@ -55,6 +55,20 @@
       "cuda_version": "11.8.0",
       "cudnn_version": "cudnn8",
       "base_ubuntu": "22.04"
+    },
+    {
+      "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
+      "extra_tags": "12.3",
+      "cuda_version": "12.3.2",
+      "cudnn_version": "cudnn9",
+      "base_ubuntu": "22.04"
+    },
+    {
+      "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
+      "extra_tags": "12.4",
+      "cuda_version": "12.4.1",
+      "cudnn_version": "cudnn",
+      "base_ubuntu": "22.04"
     }
   ]
 }
