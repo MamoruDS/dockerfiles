@@ -27,7 +27,7 @@ _UID=${CTR_UID:-1000}
 _USER=${CTR_USER:-ctr}
 _GID=${CTR_GID:-}
 _GROUP=${CTR_GROUP:-}
-PASSWORD=${PASSWORD:-localpasswd}
+PASSWORD=${PASSWORD:-}
 
 if [ ! -z $_GID ]; then
     if [ -z $_GROUP ]; then
@@ -48,6 +48,16 @@ else
     HOME="/home/$_USER"
 fi
 
+if [ -z $PASSWORD ]; then
+    info "Generating user password"
+    if [ -x "$(command -v openssl)" ]; then
+        PASSWORD="$(openssl rand -base64 16)"
+    else
+        PASSWORD="$(tr -dc '0-9a-zA-Z+//' < /dev/urandom | head -c 16)"
+    fi
+fi
+
+info "Setting user initial password to $PASSWORD"
 usermod -aG sudo $_USER \
     && echo $_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$_USER \
     && echo 'Set disable_coredump false' >> /etc/sudo.conf \
