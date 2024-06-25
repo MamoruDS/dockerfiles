@@ -1,0 +1,94 @@
+name: workspace-image-ci-test
+
+on:
+  workflow_dispatch:
+    inputs:
+      is_matrix_test:
+        description: only test the validity of matrix
+        required: false
+        type: boolean
+        default: false
+      matrix_jq_selection:
+        description: jq select method expression used to filter the matrix
+        required: false
+        type: string
+        default: true
+
+jobs:
+  load-targets:
+    runs-on: ubuntu-latest
+    outputs:
+      targets: ${{ steps.set-data.outputs.targets }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: set-data
+        working-directory: ./CTR_WORKSPACE
+        run: |
+          fp=./targets_matrix.json
+          if [ -e $fp ]; then
+            jq_sel='${{ github.event.inputs.matrix_jq_selection }}'
+            if [ -z $jq_sel ]; then
+              jq_sel='true'
+            fi
+            matrix=$(cat $fp | jq -c "{ include: [ .include[] | select($jq_sel) ] }")
+            echo "targets=$matrix" >> $GITHUB_OUTPUT
+          else
+            echo "$fp not found"
+            exit 1
+          fi
+  build-test:
+    needs: load-targets
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.load-targets.outputs.targets) }}
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: workspace
+    steps:
+      - uses: actions/checkout@v3
+      - name: Downcase Repo
+        run: |
+          echo "REPO=${GITHUB_REPOSITORY_OWNER,,}/${IMAGE_NAME,,}" >> ${GITHUB_ENV}
+      - name: Build tags for CUDA image
+        if: ${{ matrix.cuda_version }}
+        run: |
+          SHA="${GITHUB_SHA::7}"
+          IFS=,
+          for tag in $(echo ${{ matrix.cuda_version }},${{ matrix.extra_tags }}); do
+            if [ -n $tag ]; then
+              echo "${REGISTRY}/${REPO}:cuda${tag}" >> .tags
+              echo "${REGISTRY}/${REPO}:cuda${tag}.${SHA}" >> .tags
+            fi
+          done
+          echo "EXTRA_TAGS<<EOF" >> $GITHUB_ENV
+          cat .tags >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+      - name: Build tags for non-CUDA image
+        if: ${{ !matrix.cuda_version }}
+        run: |
+          SHA="${GITHUB_SHA::7}"
+          IFS=,
+          for tag in $(echo ${{ matrix.extra_tags }}); do
+            if [ -n $tag ]; then
+              echo "${REGISTRY}/${REPO}:${tag}" >> .tags
+              echo "${REGISTRY}/${REPO}:${tag}.${SHA}" >> .tags
+            fi
+          done
+          if [ -f .tags ]; then
+            echo "EXTRA_TAGS<<EOF" >> $GITHUB_ENV
+            cat .tags >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          fi
+      - name: Build
+        if: ${{ !fromJSON(github.event.inputs.is_matrix_test) && env.EXTRA_TAGS }}
+        uses: docker/build-push-action@v3
+        with:
+          context: ./CTR_WORKSPACE
+          file: ${{ matrix.dockerfile }}
+          push: false
+          tags: ${{ env.EXTRA_TAGS }}
+          build-args: |
+            BASE_UBUNTU=${{ matrix.base_ubuntu }}
+            CUDA_VER=${{ matrix.cuda_version }}
+            CUDNN_VER=${{ matrix.cudnn_version }}
