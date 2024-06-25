@@ -8,18 +8,6 @@
     },
     {
       "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
-      "extra_tags": "",
-      "cuda_version": "10.1",
-      "base_ubuntu": "18.04"
-    },
-    {
-      "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
-      "extra_tags": "",
-      "cuda_version": "10.2",
-      "base_ubuntu": "18.04"
-    },
-    {
-      "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
       "extra_tags": "11.0",
       "cuda_version": "11.0.3",
       "base_ubuntu": "20.04"
@@ -28,18 +16,6 @@
       "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
       "extra_tags": "11.1",
       "cuda_version": "11.1.1",
-      "base_ubuntu": "20.04"
-    },
-    {
-      "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
-      "extra_tags": "",
-      "cuda_version": "11.2.0",
-      "base_ubuntu": "20.04"
-    },
-    {
-      "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
-      "extra_tags": "",
-      "cuda_version": "11.2.1",
       "base_ubuntu": "20.04"
     },
     {
@@ -62,18 +38,6 @@
     },
     {
       "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
-      "extra_tags": "",
-      "cuda_version": "11.5.0",
-      "base_ubuntu": "20.04"
-    },
-    {
-      "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
-      "extra_tags": "",
-      "cuda_version": "11.5.1",
-      "base_ubuntu": "20.04"
-    },
-    {
-      "dockerfile": "./CTR_WORKSPACE/ws.cuda.dockerfile",
       "extra_tags": "11.5",
       "cuda_version": "11.5.2",
       "base_ubuntu": "20.04"
@@ -92,4 +56,3 @@
     }
   ]
 }
-
