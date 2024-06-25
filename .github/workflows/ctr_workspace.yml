@@ -111,3 +111,4 @@ jobs:
           build-args: |
             BASE_UBUNTU=${{ matrix.base_ubuntu }}
             CUDA_VER=${{ matrix.cuda_version }}
+            CUDNN_VER=${{ matrix.cudnn_version }}
