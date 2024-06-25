@@ -1,5 +1,5 @@
-ARG BASE_UBUNTU=20.04
-ARG CUDA_VER=11.3.1
+ARG BASE_UBUNTU=22.04
+ARG CUDA_VER=11.7.1
 ARG CUDNN_VER=cudnn8
 FROM nvidia/cuda:${CUDA_VER}-${CUDNN_VER}-devel-ubuntu${BASE_UBUNTU}
 LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"

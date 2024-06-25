@@ -1,4 +1,4 @@
-ARG BASE_UBUNTU=22.04
+ARG BASE_UBUNTU=24.04
 FROM ubuntu:${BASE_UBUNTU}
 LABEL maintainer="MamoruDS <mamoruds.io@gmail.com>"
 
