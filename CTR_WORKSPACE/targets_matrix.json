@@ -58,6 +58,13 @@
     },
     {
       "containerfile": "./CTR_WORKSPACE/Containerfile.cuda",
+      "extra_tags": "12.1",
+      "cuda_version": "12.1.1",
+      "cudnn_version": "cudnn8",
+      "base_ubuntu": "22.04"
+    },
+    {
+      "containerfile": "./CTR_WORKSPACE/Containerfile.cuda",
       "extra_tags": "12.3",
       "cuda_version": "12.3.2",
       "cudnn_version": "cudnn9",
