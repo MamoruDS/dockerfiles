@@ -42,20 +42,20 @@ ssh admin@127.0.0.1 -p 8022
 
 ## Environment variables
 
-| Variable                 | Description                                                                       |
-| ------------------------ | --------------------------------------------------------------------------------- |
-| `-e CTR_SHELL=zsh`       | Specify your default shell (`zsh`/`bash`)<br />_default_: `bash`                  |
-| `-e CTR_USER=username`   | Username used for ssh login to the container<br />_default_: `ctr`                |
-| `-e CTR_UID=1000`        | Specify user id for `$USER`<br />_default_: `1000`                                |
-| `-e CTR_GID=5000`        | Specify group id for `$USER`<br />_default_: ` `                                  |
-| `-e CTR_GROUP=groupname` | `$GROUP` will be ignored when `GID` is not given<br />_default_: ` `              |
-| `-e PASSWORD=passwd`     | Password used to authenticate the ssh login<br />_default_: `localpasswd`         |
-| `-e TZ=Asia/Tokyo`       | Specify your timezone<br />_default_: `Etc/UTC`                                   |
-| `-e NVIM=1`              | Specify if neovim will be installed automatically<br />_default_: ` `             |
-| `-e CONDA=1`             | Specify if conda will be installed automatically<br />_default_: ` `              |
-| `-e CONDA_HOME=/conda`   | Specify the path where conda will be installed <br />_default_: `$HOME/miniconda` |
-| `-e START_SCRIPT=$RMT`   | Url of start script, executed after `docker run` <br />_default_: ` `             |
-| `-e SCRIPT_CHANNEL=ws`   | Specify scripts' fetching channel<br />_default_: `main`                          |
+| Variable                 | Description                                                                               |
+| ------------------------ | ----------------------------------------------------------------------------------------- |
+| `-e CTR_SHELL=zsh`       | Specify your default shell (`zsh`/`bash`)<br />_default_: `bash`                          |
+| `-e CTR_USER=username`   | Username used for ssh login to the container<br />_default_: `ctr`                        |
+| `-e CTR_UID=5000`        | Specify user id for `$USER`<br />_default_: `2000`                                        |
+| `-e CTR_GID=5000`        | Specify group id for `$USER`<br />_default_: ` `                                          |
+| `-e CTR_GROUP=groupname` | `$GROUP` will be ignored when `GID` is not given<br />_default_: ` `                      |
+| `-e PASSWORD=passwd`     | Password used to authenticate the ssh login<br />_default_: a randomly generated password |
+| `-e TZ=Asia/Tokyo`       | Specify your timezone<br />_default_: `Etc/UTC`                                           |
+| `-e NVIM=1`              | Specify if neovim will be installed automatically<br />_default_: ` `                     |
+| `-e CONDA=1`             | Specify if conda will be installed automatically<br />_default_: ` `                      |
+| `-e CONDA_HOME=/conda`   | Specify the path where conda will be installed <br />_default_: `$HOME/miniconda`         |
+| `-e START_SCRIPT=$RMT`   | Url of start script, executed after `docker run` <br />_default_: ` `                     |
+| `-e SCRIPT_CHANNEL=ws`   | Specify scripts' fetching channel<br />_default_: `main`                                  |
 
 ### Dotfiles related variables
 
@@ -67,28 +67,22 @@ ssh admin@127.0.0.1 -p 8022
 | `DOTFILES_ROOT`              | _default_: `$HOME/.dot.local.toml`                                                    |
 | `DOTFILES_LOCAL`             |                                                                                       |
 
-## Ports
-
-| Port      | Description                                                      |
-| --------- | ---------------------------------------------------------------- |
-| `-p 22`   | ssh server                                                       |
-| `-p 5901` | VNC server <br /> Only available for containers with `*-vnc` tag |
 
 ## Build
 
-Build from dockerfile. To find the valid corresponding CUDA and Ubuntu versions, please refer to either the available [CUDA images](https://hub.docker.com/r/nvidia/cuda/tags) or consult our [matrix](https://github.com/MamoruDS/dockerfiles/blob/main/CTR_WORKSPACE/targets_matrix.json) for Github Action.
+Build from Contianerfile. To find the valid corresponding CUDA and Ubuntu versions, please refer to either the available [CUDA image manifests](https://gitlab.com/nvidia/container-images/cuda/-/blob/master/manifests/cuda.yaml) or consult our [matrix](./targets_matrix.json) for Github Action.
 
 ```shell
 docker build --no-cache \
              -t mamoruio/workspace:local \
-             -f ws.dockerfile \
              --build-arg "BASE_UBUNTU=22.04" \
              .
 
 docker build --no-cache \
              -t mamoruio/workspace:local.cuda11.3 \
-             -f cuda/ws.cuda.dockerfile \
-             --build-arg "CUDA_VER=11.3.0" \
-             --build-arg "BASE_UBUNTU=20.04" \
+             -f Containerfile.cuda \
+             --build-arg "CUDA_VER=12.6.0" \
+             --build-arg "CUDNN_VER=cudnn" \
+             --build-arg "BASE_UBUNTU=24.04" \
              .
 ```

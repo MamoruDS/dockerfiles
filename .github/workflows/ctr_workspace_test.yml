@@ -85,7 +85,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./CTR_WORKSPACE
-          file: ${{ matrix.dockerfile }}
+          file: ${{ matrix.containerfile }}
           push: false
           tags: ${{ env.EXTRA_TAGS }}
           build-args: |
