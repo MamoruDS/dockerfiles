@@ -23,7 +23,7 @@ ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 _SHELL=${CTR_SHELL:-bash}
 
-_UID=${CTR_UID:-1000}
+_UID=${CTR_UID:-2000}
 _USER=${CTR_USER:-ctr}
 _GID=${CTR_GID:-}
 _GROUP=${CTR_GROUP:-}

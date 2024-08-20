@@ -46,7 +46,7 @@ ssh admin@127.0.0.1 -p 8022
 | ------------------------ | ----------------------------------------------------------------------------------------- |
 | `-e CTR_SHELL=zsh`       | Specify your default shell (`zsh`/`bash`)<br />_default_: `bash`                          |
 | `-e CTR_USER=username`   | Username used for ssh login to the container<br />_default_: `ctr`                        |
-| `-e CTR_UID=1000`        | Specify user id for `$USER`<br />_default_: `1000`                                        |
+| `-e CTR_UID=5000`        | Specify user id for `$USER`<br />_default_: `2000`                                        |
 | `-e CTR_GID=5000`        | Specify group id for `$USER`<br />_default_: ` `                                          |
 | `-e CTR_GROUP=groupname` | `$GROUP` will be ignored when `GID` is not given<br />_default_: ` `                      |
 | `-e PASSWORD=passwd`     | Password used to authenticate the ssh login<br />_default_: a randomly generated password |
