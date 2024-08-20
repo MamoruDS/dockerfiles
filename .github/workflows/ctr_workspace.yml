@@ -105,7 +105,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./CTR_WORKSPACE
-          file: ${{ matrix.dockerfile }}
+          file: ${{ matrix.containerfile }}
           push: ${{ fromJSON(github.event.inputs.is_push_to_ghcr) }}
           tags: ${{ env.EXTRA_TAGS }}
           build-args: |
