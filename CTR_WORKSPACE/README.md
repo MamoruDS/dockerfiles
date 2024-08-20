@@ -70,7 +70,7 @@ ssh admin@127.0.0.1 -p 8022
 
 ## Build
 
-Build from Contianerfile. To find the valid corresponding CUDA and Ubuntu versions, please refer to either the available [CUDA images](https://hub.docker.com/r/nvidia/cuda/tags) or consult our [matrix](https://github.com/MamoruDS/dockerfiles/blob/main/CTR_WORKSPACE/targets_matrix.json) for Github Action.
+Build from Contianerfile. To find the valid corresponding CUDA and Ubuntu versions, please refer to either the available [CUDA image manifests](https://gitlab.com/nvidia/container-images/cuda/-/blob/master/manifests/cuda.yaml) or consult our [matrix](./targets_matrix.json) for Github Action.
 
 ```shell
 docker build --no-cache \
@@ -81,7 +81,8 @@ docker build --no-cache \
 docker build --no-cache \
              -t mamoruio/workspace:local.cuda11.3 \
              -f Containerfile.cuda \
-             --build-arg "CUDA_VER=11.3.0" \
-             --build-arg "BASE_UBUNTU=20.04" \
+             --build-arg "CUDA_VER=12.6.0" \
+             --build-arg "CUDNN_VER=cudnn" \
+             --build-arg "BASE_UBUNTU=24.04" \
              .
 ```
