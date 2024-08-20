@@ -67,12 +67,6 @@ ssh admin@127.0.0.1 -p 8022
 | `DOTFILES_ROOT`              | _default_: `$HOME/.dot.local.toml`                                                    |
 | `DOTFILES_LOCAL`             |                                                                                       |
 
-## Ports
-
-| Port      | Description                                                      |
-| --------- | ---------------------------------------------------------------- |
-| `-p 22`   | ssh server                                                       |
-| `-p 5901` | VNC server <br /> Only available for containers with `*-vnc` tag |
 
 ## Build
 

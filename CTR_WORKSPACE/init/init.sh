@@ -94,17 +94,6 @@ if [ ! -z $NVIM ]; then
     fi
 fi
 
-if [ -f "/usr/bin/vncserver" ]; then
-    info "START: VNC server"
-    VNC=$HOME/.vnc
-    mkdir -p $VNC \
-        && curl -sfL $REPO_URL/$SCRIPT_CHANNEL/CTR_WORKSPACE/init/vncpasswd.init -o $VNC/passwd \
-        && curl -sfL $REPO_URL/$SCRIPT_CHANNEL/CTR_WORKSPACE/init/xstartup.init -o $VNC/xstartup \
-        && chown -R $_USER $VNC \
-        && chmod 755 $VNC/xstartup
-    sudo -u $_USER vncserver
-fi
-
 info "EXECUTE: start script"
 if [ ! -z $START_SCRIPT ]; then
     sudo -u $_USER sh -c "(cd ~ && curl -sSfL $START_SCRIPT | sh)"
