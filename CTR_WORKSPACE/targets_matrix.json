@@ -44,6 +44,13 @@
     },
     {
       "containerfile": "./CTR_WORKSPACE/Containerfile.cuda",
+      "extra_tags": "11.6",
+      "cuda_version": "11.6.1",
+      "cudnn_version": "cudnn8",
+      "base_ubuntu": "20.04"
+    },
+    {
+      "containerfile": "./CTR_WORKSPACE/Containerfile.cuda",
       "extra_tags": "11.7",
       "cuda_version": "11.7.1",
       "cudnn_version": "cudnn8",
